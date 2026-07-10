@@ -48,7 +48,7 @@ function AiPage() {
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[280px_1fr]">
         {/* Left column */}
-        <aside className="space-y-4">
+        <aside className="space-y-4 order-2 lg:order-1">
           <div
             className="rounded-3xl border border-border bg-card p-5"
             style={{ borderRadius: 20 }}
@@ -91,7 +91,7 @@ function AiPage() {
 
         {/* Chat */}
         <section
-          className="flex min-h-[520px] flex-col overflow-hidden rounded-3xl border border-border bg-background"
+          className="flex min-h-[520px] flex-col overflow-hidden rounded-3xl border border-border bg-background order-1 lg:order-2"
           style={{ borderRadius: 20 }}
         >
           <div className="flex items-center gap-2 border-b border-border px-5 py-3">

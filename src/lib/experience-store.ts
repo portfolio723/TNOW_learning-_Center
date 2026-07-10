@@ -48,13 +48,33 @@ export const useExperience = create<State>()(
       videosWatched: 0,
       achievements: [],
       setUser: (user) => set({ user }),
-      complete: (id) => set((s) => ({ completed: { ...s.completed, [id]: true } })),
+      complete: (id) =>
+        set((s) => {
+          if (id === "tour") {
+            const allDone = s.capabilitiesViewed.length === 6;
+            return {
+              completed: {
+                ...s.completed,
+                tour: allDone,
+              },
+            };
+          }
+          return { completed: { ...s.completed, [id]: true } };
+        }),
       markCapability: (id) =>
-        set((s) => ({
-          capabilitiesViewed: s.capabilitiesViewed.includes(id)
+        set((s) => {
+          const nextViewed = s.capabilitiesViewed.includes(id)
             ? s.capabilitiesViewed
-            : [...s.capabilitiesViewed, id],
-        })),
+            : [...s.capabilitiesViewed, id];
+          const isTourDone = nextViewed.length === 6;
+          return {
+            capabilitiesViewed: nextViewed,
+            completed: {
+              ...s.completed,
+              tour: isTourDone,
+            },
+          };
+        }),
       markStory: (id) =>
         set((s) => ({
           storiesRead: s.storiesRead.includes(id) ? s.storiesRead : [...s.storiesRead, id],

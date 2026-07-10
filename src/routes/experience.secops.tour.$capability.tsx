@@ -64,10 +64,10 @@ function CapabilityPage() {
           onPlay={() => {
             incVideos();
             addAchievement("firstVideo");
+            markCapability(cap.id);
           }}
           onComplete={() => {
             markCapability(cap.id);
-            complete("tour");
           }}
         />
       </div>
@@ -135,7 +135,6 @@ function CapabilityPage() {
         <button
           onClick={() => {
             markCapability(cap.id);
-            complete("tour");
           }}
           className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
             isDone

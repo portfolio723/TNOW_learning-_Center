@@ -119,10 +119,10 @@ function WhyPage() {
       <div className="mt-12">
         <h2 className="font-display text-xl font-semibold">Manual vs SecOps</h2>
         <div
-          className="mt-4 overflow-hidden rounded-3xl border border-border"
+          className="mt-4 overflow-x-auto rounded-3xl border border-border"
           style={{ borderRadius: 20 }}
         >
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[600px]">
             <thead className="bg-surface">
               <tr>
                 <th className="px-6 py-3 text-left font-medium text-caption">Area</th>

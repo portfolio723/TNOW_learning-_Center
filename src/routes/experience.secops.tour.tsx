@@ -11,6 +11,7 @@ export const Route = createFileRoute("/experience/secops/tour")({
 
 function TourGrid() {
   const viewed = useExperience((s) => s.capabilitiesViewed);
+  const markCapability = useExperience((s) => s.markCapability);
 
   return (
     <div>
@@ -19,6 +20,35 @@ function TourGrid() {
         title="Explore SecOps capability by capability"
         description="Six focused tours, ~2 minutes each. Watch the ones most relevant to your role — we'll mark them complete automatically."
       />
+
+      {/* Product Tour Progress Section */}
+      <div className="mt-8 rounded-3xl border border-border bg-card p-6 max-w-xl shadow-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-display text-base font-semibold text-foreground">Tour progress</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Watch or mark all 6 capability demos to complete the Product Tour step
+            </p>
+          </div>
+          <span className="text-sm font-semibold text-primary shrink-0 ml-4">
+            {viewed.length} / 6 completed
+          </span>
+        </div>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted relative">
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+            style={{ width: `${(viewed.length / 6) * 100}%` }}
+          />
+        </div>
+        {viewed.length === 6 && (
+          <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <div className="grid size-5 place-items-center rounded-full bg-emerald-500/15 text-emerald-500">
+              <Check className="size-3.5 stroke-[3px]" />
+            </div>
+            Congratulations! You have completed the Product Tour step!
+          </div>
+        )}
+      </div>
 
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {CAPABILITIES.map((c) => {
@@ -38,11 +68,32 @@ function TourGrid() {
                     <Play className="ml-0.5 size-5 fill-current" />
                   </div>
                 </div>
-                {done && (
-                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-medium text-primary-foreground">
-                    <Check className="size-3" /> Complete
-                  </span>
-                )}
+
+                {/* Check/Tick Icon Button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    markCapability(c.id);
+                  }}
+                  className={`absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold transition-all duration-300 ${
+                    done
+                      ? "bg-emerald-500 text-white shadow-sm scale-100"
+                      : "bg-black/40 hover:bg-black/60 border border-white/20 text-white/90 hover:scale-105 active:scale-95"
+                  }`}
+                >
+                  {done ? (
+                    <>
+                      <Check className="size-3.5 stroke-[3px]" /> Complete
+                    </>
+                  ) : (
+                    <>
+                      <span className="size-1.5 rounded-full bg-white/60 animate-pulse" /> Mark
+                      watched
+                    </>
+                  )}
+                </button>
+
                 <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-[11px] text-foreground">
                   <Clock className="size-3" /> {c.duration}
                 </span>

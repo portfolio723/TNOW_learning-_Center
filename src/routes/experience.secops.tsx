@@ -10,6 +10,7 @@ import {
   Clock,
   House,
   PaperPlaneTilt,
+  ArrowRight,
 } from "@phosphor-icons/react";
 import { STEPS, useExperience, useProgress } from "@/lib/experience-store";
 import { AI_ANSWERS, AI_SUGGESTIONS } from "@/lib/experience-data";
@@ -38,46 +39,123 @@ function SecOpsLayout() {
     { capability?: string } | undefined;
   const capabilityLabel = capabilityParam?.capability?.replace(/-/g, " ");
 
+  const currentIdx = STEPS.findIndex((s) => s.id === currentStep.id);
+  const nextStep = STEPS[currentIdx + 1];
+
   return (
     <div className="min-h-dvh bg-background text-foreground">
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-6 py-3">
-          <div className="flex items-center gap-3">
-            <Link to="/experience" className="flex items-center">
-              <img src="/logo.png" alt="ToggleNow" className="h-7 w-auto object-contain" />
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 md:px-6 py-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
+            <Link to="/experience" className="flex items-center shrink-0">
+              <img src="/logo.png" alt="ToggleNow" className="h-6 sm:h-7 w-auto object-contain" />
             </Link>
-            <CaretRight className="size-3.5 text-caption" />
-            <Link to="/experience/secops" className="text-sm font-medium text-foreground">
+            <CaretRight className="size-3 text-caption shrink-0" />
+            <Link
+              to="/experience/secops"
+              className="text-xs sm:text-sm font-medium text-foreground shrink-0"
+            >
               SecOps
             </Link>
             {currentStep.id !== "welcome" && (
               <>
-                <CaretRight className="size-3.5 text-caption" />
-                <span className="text-sm text-muted-foreground">{currentStep.label}</span>
+                <CaretRight className="size-3 text-caption shrink-0" />
+                <span className="text-xs sm:text-sm text-muted-foreground truncate max-w-[80px] sm:max-w-none">
+                  {currentStep.label}
+                </span>
               </>
             )}
             {capabilityLabel && (
               <>
-                <CaretRight className="size-3.5 text-caption" />
-                <span className="text-sm capitalize text-muted-foreground">{capabilityLabel}</span>
+                <CaretRight className="size-3 text-caption shrink-0" />
+                <span className="text-xs sm:text-sm capitalize text-muted-foreground truncate max-w-[80px] sm:max-w-none">
+                  {capabilityLabel}
+                </span>
               </>
             )}
           </div>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 md:flex shrink-0">
             <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               {pct}% Complete
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             <UserProfileMenu />
           </div>
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1400px] gap-8 px-6 py-8">
+      {/* Mobile Sticky Step Header */}
+      <div className="sticky top-[49px] sm:top-[53px] lg:hidden z-20 border-b border-border bg-background/95 backdrop-blur-md px-4 py-3 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          {/* Step Info */}
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold text-primary uppercase tracking-wider">
+              <span>
+                Step {currentIdx + 1} of {STEPS.length}
+              </span>
+              <span className="text-muted-foreground/40">•</span>
+              <span>{pct}% Done</span>
+            </div>
+            <h2 className="font-display text-sm font-bold text-foreground truncate mt-0.5">
+              {currentStep.label}
+            </h2>
+          </div>
+
+          {/* Next / Forward CTA Button right at the top on mobile */}
+          {nextStep ? (
+            <Link
+              to={nextStep.path}
+              className="inline-flex items-center gap-1 bg-primary text-white text-[11px] font-semibold rounded-full px-3.5 py-1.5 shadow-sm hover:bg-primary-hover active:scale-95 transition shrink-0"
+            >
+              Continue <ArrowRight className="size-3" weight="bold" />
+            </Link>
+          ) : (
+            currentStep.id !== "book" && (
+              <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold shrink-0 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+                Step Complete
+              </span>
+            )
+          )}
+        </div>
+
+        {/* Horizontal Scrollable Steps List */}
+        <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          {STEPS.map((s, i) => {
+            const isActive = currentStep.id === s.id;
+            const isDone = pathname.includes("/success") || completed[s.id];
+            return (
+              <Link
+                key={s.id}
+                to={s.path}
+                className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] transition-all shrink-0 border ${
+                  isActive
+                    ? "bg-primary/10 text-primary border-primary/25 font-semibold"
+                    : "bg-surface text-muted-foreground border-border/70"
+                }`}
+              >
+                <span
+                  className={`grid size-4 place-items-center rounded-full text-[9px] font-bold ${
+                    isDone
+                      ? "bg-primary text-primary-foreground"
+                      : isActive
+                        ? "bg-primary/20 text-primary border border-primary/30"
+                        : "bg-muted text-caption border border-border"
+                  }`}
+                >
+                  {isDone ? <Check className="size-2.5" weight="bold" /> : i + 1}
+                </span>
+                <span>{s.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mx-auto flex max-w-[1400px] gap-8 px-4 sm:px-6 py-6 md:py-8">
         {/* Sidebar */}
         <aside className="sticky top-[73px] hidden h-[calc(100dvh-100px)] w-64 shrink-0 flex-col lg:flex">
           <div className="rounded-2xl border border-border bg-card p-5">
