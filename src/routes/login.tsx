@@ -118,7 +118,53 @@ function LoginPage() {
   return (
     <main className="min-h-dvh bg-background text-foreground">
       <div className="grid min-h-dvh lg:grid-cols-5">
-        {/* Left — Login */}
+        {/* Left — Showcase */}
+        <aside className="hidden bg-surface-alt lg:col-span-3 lg:block">
+          <div className="flex h-full flex-col justify-between px-14 py-14">
+            <ShowcaseIllustration />
+
+            <div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  {
+                    icon: UserGear,
+                    title: "Self-Service Access",
+                    desc: "Branded catalog for business users.",
+                  },
+                  {
+                    icon: ShieldCheck,
+                    title: "Segregation of Duties",
+                    desc: "Simulate conflicts before they happen.",
+                  },
+                  {
+                    icon: Sparkle,
+                    title: "License Optimization",
+                    desc: "Right-size SAP licenses automatically.",
+                  },
+                  {
+                    icon: Key,
+                    title: "Emergency Access",
+                    desc: "Firefighter with policy-safe approvals.",
+                  },
+                ].map((f) => (
+                  <div key={f.title} className="rounded-2xl border border-border bg-background p-4">
+                    <f.icon className="size-5 text-primary" weight="duotone" />
+                    <p className="mt-3 text-sm font-medium text-foreground">{f.title}</p>
+                    <p className="mt-1 text-xs text-caption">{f.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 grid grid-cols-3 gap-4">
+                <Stat kpi="50%" label="Reduction in tickets" />
+                <Stat kpi="Days → Minutes" label="Provisioning" />
+                <Stat kpi="100%" label="Audit ready" />
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Right — Login */}
         <section className="flex flex-col justify-between px-6 py-10 lg:col-span-2 lg:px-14">
           <div className="mx-auto flex h-full w-full max-w-sm flex-col justify-between gap-12">
             <div className="flex items-center">
@@ -238,52 +284,6 @@ function LoginPage() {
             </p>
           </div>
         </section>
-
-        {/* Right — Showcase */}
-        <aside className="hidden bg-surface-alt lg:col-span-3 lg:block">
-          <div className="flex h-full flex-col justify-between px-14 py-14">
-            <ShowcaseIllustration />
-
-            <div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  {
-                    icon: UserGear,
-                    title: "Self-Service Access",
-                    desc: "Branded catalog for business users.",
-                  },
-                  {
-                    icon: ShieldCheck,
-                    title: "Segregation of Duties",
-                    desc: "Simulate conflicts before they happen.",
-                  },
-                  {
-                    icon: Sparkle,
-                    title: "License Optimization",
-                    desc: "Right-size SAP licenses automatically.",
-                  },
-                  {
-                    icon: Key,
-                    title: "Emergency Access",
-                    desc: "Firefighter with policy-safe approvals.",
-                  },
-                ].map((f) => (
-                  <div key={f.title} className="rounded-2xl border border-border bg-background p-4">
-                    <f.icon className="size-5 text-primary" weight="duotone" />
-                    <p className="mt-3 text-sm font-medium text-foreground">{f.title}</p>
-                    <p className="mt-1 text-xs text-caption">{f.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 grid grid-cols-3 gap-4">
-                <Stat kpi="50%" label="Reduction in tickets" />
-                <Stat kpi="Days → Minutes" label="Provisioning" />
-                <Stat kpi="100%" label="Audit ready" />
-              </div>
-            </div>
-          </div>
-        </aside>
       </div>
     </main>
   );
