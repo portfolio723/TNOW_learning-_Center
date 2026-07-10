@@ -110,7 +110,7 @@ function LoginPage() {
               <p className="mb-3 text-xs font-medium uppercase tracking-widest text-caption">
                 Experience Center
               </p>
-              <h1 className="font-display text-4xl font-semibold leading-tight">
+              <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight whitespace-nowrap">
                 Welcome to ToggleNow
               </h1>
               <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
