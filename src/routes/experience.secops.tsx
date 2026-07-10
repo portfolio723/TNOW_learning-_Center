@@ -206,8 +206,6 @@ function SecOpsLayout() {
               })}
             </nav>
           </div>
-
-          <Achievements />
         </aside>
 
         {/* Main content */}
@@ -228,43 +226,6 @@ function SecOpsLayout() {
         <span className="hidden md:inline">Ask AI Expert</span>
       </button>
       {aiOpen && <AiDrawer onClose={() => setAiOpen(false)} />}
-    </div>
-  );
-}
-
-function Achievements() {
-  const { achievements } = useExperience();
-  const all = [
-    { id: "firstVideo", label: "First video watched" },
-    { id: "firstStory", label: "First story explored" },
-    { id: "firstAi", label: "First question asked" },
-    { id: "workshopReady", label: "Workshop ready" },
-  ];
-  return (
-    <div className="mt-4 rounded-2xl border border-border bg-surface-alt p-5">
-      <p className="text-xs font-medium uppercase tracking-widest text-caption">Milestones</p>
-      <ul className="mt-3 space-y-2">
-        {all.map((a) => {
-          const got = achievements.includes(a.id);
-          return (
-            <li
-              key={a.id}
-              className={`flex items-center gap-2 text-sm ${
-                got ? "text-foreground" : "text-caption"
-              }`}
-            >
-              <span
-                className={`grid size-4 place-items-center rounded-full ${
-                  got ? "bg-primary text-primary-foreground" : "border border-border"
-                }`}
-              >
-                {got && <Check className="size-2.5" />}
-              </span>
-              {a.label}
-            </li>
-          );
-        })}
-      </ul>
     </div>
   );
 }

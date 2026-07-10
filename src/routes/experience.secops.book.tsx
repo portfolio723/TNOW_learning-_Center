@@ -136,262 +136,168 @@ function BookPage() {
         description="A 45-minute working session with a SecOps consultant, shaped by everything you've explored."
       />
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-6">
-          <div
-            className="rounded-3xl border border-border bg-card p-6"
-            style={{ borderRadius: 20 }}
-          >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/50 pb-4">
-              <div>
-                <p className="font-display text-lg font-semibold">Pick a time</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Select from our available consultant times
-                </p>
-              </div>
-
-              {/* Timezone Selector */}
-              <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="tz-select"
-                  className="text-[10px] font-semibold text-caption uppercase tracking-wider"
-                >
-                  Timezone
-                </label>
-                <select
-                  id="tz-select"
-                  value={timezone}
-                  onChange={(e) => setTimezone(e.target.value)}
-                  className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary/25"
-                >
-                  {commonTimezones.map((tz) => (
-                    <option key={tz.value} value={tz.value}>
-                      {tz.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+      <div className="mt-10 max-w-3xl space-y-6">
+        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/50 pb-4">
+            <div>
+              <p className="font-display text-lg font-semibold">Pick a time</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Select from our available consultant times
+              </p>
             </div>
 
-            {customBooking ? (
-              <form
-                onSubmit={handleCustomSubmit}
-                className="mt-6 space-y-4 rounded-2xl bg-card p-5 border border-border"
+            {/* Timezone Selector */}
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="tz-select"
+                className="text-[10px] font-semibold text-caption uppercase tracking-wider"
               >
-                <p className="font-display text-sm font-semibold">Request a custom date & time</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
-                      Date
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      value={customDate}
-                      onChange={(e) => setCustomDate(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
-                      Time
-                    </label>
-                    <input
-                      type="time"
-                      required
-                      value={customTime}
-                      onChange={(e) => setCustomTime(e.target.value)}
-                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setCustomBooking(false)}
-                    className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-semibold hover:bg-surface"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-semibold hover:bg-primary-hover"
-                  >
-                    Confirm Custom Time
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <>
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {visibleSlots.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setSlot(s)}
-                      className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
-                        slot === s
-                          ? "border-primary bg-primary/5 text-primary ring-1 ring-primary/30"
-                          : "border-border bg-background text-foreground hover:border-primary/30"
-                      }`}
-                      style={{ borderRadius: 16 }}
-                    >
-                      <span className="font-medium">{s}</span>
-                      <span className="block text-[10px] text-muted-foreground mt-0.5">
-                        Consultant available
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/30">
-                  <button
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-xs font-semibold text-primary hover:underline"
-                  >
-                    {showMore ? "Show fewer times" : "Show more times..."}
-                  </button>
-                  <button
-                    onClick={() => setCustomBooking(true)}
-                    className="text-xs font-semibold text-muted-foreground hover:text-foreground"
-                  >
-                    Request a custom time instead
-                  </button>
-                </div>
-              </>
-            )}
-
-            {slot && (
-              <div className="mt-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-bold text-emerald-600 uppercase tracking-wider">
-                    Selected slot
-                  </p>
-                  <p className="text-sm font-semibold text-foreground mt-0.5">{slot}</p>
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  Times in{" "}
-                  {commonTimezones.find((t) => t.value === timezone)?.label.split(" (")[0] ||
-                    timezone}
-                </span>
-              </div>
-            )}
+                Timezone
+              </label>
+              <select
+                id="tz-select"
+                value={timezone}
+                onChange={(e) => setTimezone(e.target.value)}
+                className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary/25"
+              >
+                {commonTimezones.map((tz) => (
+                  <option key={tz.value} value={tz.value}>
+                    {tz.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div
-            className="rounded-3xl border border-border bg-card p-6"
-            style={{ borderRadius: 20 }}
-          >
-            <label className="font-display text-lg font-semibold">
-              What should our consultant focus on?
-            </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={5}
-              placeholder="e.g. Migration from SAP GRC, S/4 rollout, license optimization for 8,000 users…"
-              className="mt-4 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
-              style={{ borderRadius: 16 }}
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => navigate({ to: "/experience/secops/ai" })}
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          {customBooking ? (
+            <form
+              onSubmit={handleCustomSubmit}
+              className="mt-6 space-y-4 rounded-2xl bg-card p-5 border border-border"
             >
-              <ArrowLeft className="size-4" /> Back to AI
-            </button>
-            <button onClick={schedule} disabled={!slot} className="btn-primary disabled:opacity-60">
-              <CalendarCheck className="size-4" /> Schedule Workshop
-            </button>
-          </div>
+              <p className="font-display text-sm font-semibold">Request a custom date & time</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={customDate}
+                    onChange={(e) => setCustomDate(e.target.value)}
+                    className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    value={customTime}
+                    onChange={(e) => setCustomTime(e.target.value)}
+                    className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setCustomBooking(false)}
+                  className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-semibold hover:bg-surface"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-semibold hover:bg-primary-hover"
+                >
+                  Confirm Custom Time
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {visibleSlots.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSlot(s)}
+                    className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                      slot === s
+                        ? "border-primary bg-primary/5 text-primary ring-1 ring-primary/30"
+                        : "border-border bg-background text-foreground hover:border-primary/30"
+                    }`}
+                    style={{ borderRadius: 16 }}
+                  >
+                    <span className="font-medium">{s}</span>
+                    <span className="block text-[10px] text-muted-foreground mt-0.5">
+                      Consultant available
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/30">
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  {showMore ? "Show fewer times" : "Show more times..."}
+                </button>
+                <button
+                  onClick={() => setCustomBooking(true)}
+                  className="text-xs font-semibold text-muted-foreground hover:text-foreground"
+                >
+                  Request a custom time instead
+                </button>
+              </div>
+            </>
+          )}
+
+          {slot && (
+            <div className="mt-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold text-emerald-600 uppercase tracking-wider">
+                  Selected slot
+                </p>
+                <p className="text-sm font-semibold text-foreground mt-0.5">{slot}</p>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                Times in{" "}
+                {commonTimezones.find((t) => t.value === timezone)?.label.split(" (")[0] ||
+                  timezone}
+              </span>
+            </div>
+          )}
         </div>
 
-        <aside
-          className="rounded-3xl border border-border bg-card p-6 self-start"
-          style={{ borderRadius: 20 }}
-        >
-          <p className="text-xs font-medium uppercase tracking-widest text-primary">
-            Your progress
-          </p>
-          <ul className="mt-4 space-y-3 text-sm border-b border-border/60 pb-5">
-            <Row label="Videos watched" value={videosWatched} />
-            <Row label="Customer stories" value={storiesRead.length} />
-            <Row label="Questions asked" value={aiQuestionsAsked} />
-            <Row label="Capabilities explored" value={capabilitiesViewed.length} />
-          </ul>
+        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+          <label className="font-display text-lg font-semibold">
+            What should our consultant focus on?
+          </label>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={5}
+            placeholder="e.g. Migration from SAP GRC, S/4 rollout, license optimization for 8,000 users…"
+            className="mt-4 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+            style={{ borderRadius: 16 }}
+          />
+        </div>
 
-          <div className="mt-5">
-            <p className="text-xs font-bold text-foreground uppercase tracking-widest">
-              Consultant Prep Agenda
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              This workspace telemetry will personalize your briefing:
-            </p>
-
-            <div className="mt-3.5 space-y-3 text-xs text-muted-foreground">
-              {capabilitiesViewed.length > 0 ? (
-                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
-                  <span className="text-primary font-bold">✓</span>
-                  <div>
-                    <span className="block font-medium text-foreground mb-0.5">
-                      Explored Capabilities:
-                    </span>
-                    <span className="text-[11px] leading-relaxed">
-                      {capabilitiesViewed
-                        .map((id) => CAPABILITIES.find((c) => c.id === id)?.title)
-                        .filter(Boolean)
-                        .join(", ")}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex gap-2 bg-background/50 p-3 rounded-xl border border-border/30 italic">
-                  <span>-</span>
-                  <span>No specific product capabilities viewed yet.</span>
-                </div>
-              )}
-
-              {storiesRead.length > 0 ? (
-                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
-                  <span className="text-primary font-bold">✓</span>
-                  <div>
-                    <span className="block font-medium text-foreground mb-0.5">
-                      Customer Cases Reviewed:
-                    </span>
-                    <span className="text-[11px] leading-relaxed">
-                      {storiesRead
-                        .map((id) => STORIES.find((s) => s.id === id)?.company)
-                        .filter(Boolean)
-                        .join(", ")}
-                    </span>
-                  </div>
-                </div>
-              ) : null}
-
-              {aiQuestionsAsked > 0 ? (
-                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
-                  <span className="text-primary font-bold">✓</span>
-                  <div>
-                    <span className="block font-medium text-foreground mb-0.5">
-                      AI Expert Interactions:
-                    </span>
-                    <span className="text-[11px]">
-                      Logged {aiQuestionsAsked} technical and compliance inquiries.
-                    </span>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="mt-5 rounded-2xl bg-primary/5 p-4 border border-primary/10">
-            <p className="text-[11px] leading-relaxed text-caption">
-              Your session exploration history is saved securely and will be pre-briefed to your SAP
-              security architect ahead of your call.
-            </p>
-          </div>
-        </aside>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigate({ to: "/experience/secops/ai" })}
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" /> Back to AI
+          </button>
+          <button onClick={schedule} disabled={!slot} className="btn-primary disabled:opacity-60">
+            <CalendarCheck className="size-4" /> Schedule Workshop
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ export function SectionHeader({
   return (
     <div className="max-w-3xl">
       <p className="text-xs font-medium uppercase tracking-widest text-primary">{eyebrow}</p>
-      <h1 className="mt-3 font-display text-4xl font-semibold leading-tight md:text-5xl">
+      <h1 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight">
         {title}
       </h1>
       {description && (

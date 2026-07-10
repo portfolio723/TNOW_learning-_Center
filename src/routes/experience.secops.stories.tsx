@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Download } from "lucide-react";
 import { SectionHeader, StepNav } from "@/components/StepNav";
 import { STORIES, INDUSTRIES } from "@/lib/experience-data";
@@ -67,50 +68,52 @@ function StoriesPage() {
         ))}
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setOpenId(null)}
-          />
-          <div
-            className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-float"
-            style={{ borderRadius: 24 }}
-          >
-            <div className="flex items-start justify-between border-b border-border px-6 py-4 shrink-0">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-widest text-caption">
-                  {open.industry}
-                </p>
-                <h3 className="mt-1 font-display text-xl font-semibold">{open.company}</h3>
+      {open &&
+        createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              onClick={() => setOpenId(null)}
+            />
+            <div
+              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-float"
+              style={{ borderRadius: 24 }}
+            >
+              <div className="flex items-start justify-between border-b border-border px-6 py-4 shrink-0">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-widest text-caption">
+                    {open.industry}
+                  </p>
+                  <h3 className="mt-1 font-display text-xl font-semibold">{open.company}</h3>
+                </div>
+                <button
+                  onClick={() => setOpenId(null)}
+                  className="text-caption hover:text-foreground"
+                >
+                  <X className="size-5" />
+                </button>
               </div>
-              <button
-                onClick={() => setOpenId(null)}
-                className="text-caption hover:text-foreground"
-              >
-                <X className="size-5" />
-              </button>
-            </div>
-            <div className="space-y-5 px-6 py-6 overflow-y-auto flex-1">
-              <Row label="Before" value={open.challenge} />
-              <Row label="After" value={open.solution} />
-              <Row label="Business outcomes" value={open.results} />
-              <div className="rounded-2xl bg-surface-alt p-4">
-                <p className="text-xs font-medium uppercase tracking-widest text-primary">ROI</p>
-                <p className="mt-2 font-display text-2xl font-semibold">{open.metric}</p>
+              <div className="space-y-5 px-6 py-6 overflow-y-auto flex-1">
+                <Row label="Before" value={open.challenge} />
+                <Row label="After" value={open.solution} />
+                <Row label="Business outcomes" value={open.results} />
+                <div className="rounded-2xl bg-surface-alt p-4">
+                  <p className="text-xs font-medium uppercase tracking-widest text-primary">ROI</p>
+                  <p className="mt-2 font-display text-2xl font-semibold">{open.metric}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-t border-border px-6 py-4 shrink-0">
+                <button className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+                  <Download className="size-4" /> Download PDF
+                </button>
+                <button onClick={() => setOpenId(null)} className="btn-primary">
+                  Close
+                </button>
               </div>
             </div>
-            <div className="flex items-center justify-between border-t border-border px-6 py-4 shrink-0">
-              <button className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-                <Download className="size-4" /> Download PDF
-              </button>
-              <button onClick={() => setOpenId(null)} className="btn-primary">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
 
       <StepNav current="stories" />
     </div>

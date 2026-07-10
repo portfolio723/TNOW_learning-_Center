@@ -15,39 +15,48 @@ function TourGrid() {
 
   return (
     <div>
-      <SectionHeader
-        eyebrow="Step 3 · Product Tour"
-        title="Explore SecOps capability by capability"
-        description="Six focused tours, ~2 minutes each. Watch the ones most relevant to your role — we'll mark them complete automatically."
-      />
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-border/80 pb-6 mb-8">
+        <div className="max-w-2xl">
+          <p className="text-xs font-medium uppercase tracking-widest text-primary">
+            Step 3 · Product Tour
+          </p>
+          <h1 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight text-foreground">
+            Explore SecOps capability by capability
+          </h1>
+          <p className="mt-3 text-sm sm:text-[15px] leading-relaxed text-muted-foreground">
+            Six focused tours, ~2 minutes each. Watch the ones most relevant to your role — we'll
+            mark them complete automatically.
+          </p>
+        </div>
 
-      {/* Product Tour Progress Section */}
-      <div className="mt-8 rounded-3xl border border-border bg-card p-6 max-w-xl shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-display text-base font-semibold text-foreground">Tour progress</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Watch or mark all 6 capability demos to complete the Product Tour step
-            </p>
-          </div>
-          <span className="text-sm font-semibold text-primary shrink-0 ml-4">
-            {viewed.length} / 6 completed
-          </span>
-        </div>
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted relative">
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
-            style={{ width: `${(viewed.length / 6) * 100}%` }}
-          />
-        </div>
-        {viewed.length === 6 && (
-          <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            <div className="grid size-5 place-items-center rounded-full bg-emerald-500/15 text-emerald-500">
-              <Check className="size-3.5 stroke-[3px]" />
+        {/* Product Tour Progress Section */}
+        <div className="rounded-2xl border border-border bg-card p-5 w-full lg:max-w-sm shrink-0 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-display text-sm font-semibold text-foreground">Tour progress</h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                Watch or mark 6 demos to complete
+              </p>
             </div>
-            Congratulations! You have completed the Product Tour step!
+            <span className="text-xs font-semibold text-primary shrink-0 ml-4 bg-primary/10 px-2.5 py-0.5 rounded-full">
+              {viewed.length} / 6 completed
+            </span>
           </div>
-        )}
+          <div className="mt-3.5 h-1.5 overflow-hidden rounded-full bg-muted relative">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+              style={{ width: `${(viewed.length / 6) * 100}%` }}
+            />
+          </div>
+          {viewed.length === 6 && (
+            <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              <div className="grid size-4.5 place-items-center rounded-full bg-emerald-500/15 text-emerald-500">
+                <Check className="size-3 stroke-[3px]" />
+              </div>
+              Congratulations! Product Tour complete!
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
