@@ -97,7 +97,9 @@ export function VideoBlock({
       setLogIdx(Math.min(Math.floor((progress / 100) * logs.length), logs.length - 1));
       if (progress >= 100) {
         setStatus("completed");
-        onComplete?.();
+        setTimeout(() => {
+          onComplete?.();
+        }, 0);
       }
     }
   }, [progress, status, logs.length, onComplete]);
