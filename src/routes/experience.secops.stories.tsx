@@ -15,6 +15,7 @@ function StoriesPage() {
   const [openId, setOpenId] = useState<string | null>(null);
   const markStory = useExperience((s) => s.markStory);
   const addAchievement = useExperience((s) => s.addAchievement);
+  const complete = useExperience((s) => s.complete);
   const read = useExperience((s) => s.storiesRead);
 
   const filtered = industry ? STORIES.filter((s) => s.industry === industry) : STORIES;
@@ -24,6 +25,7 @@ function StoriesPage() {
     setOpenId(id);
     markStory(id);
     addAchievement("firstStory");
+    complete("stories");
   }
 
   return (
@@ -67,7 +69,7 @@ function StoriesPage() {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-foreground/40" onClick={() => setOpenId(null)} />
+          <div className="absolute inset-0 bg-transparent" onClick={() => setOpenId(null)} />
           <div
             className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-border bg-background shadow-float"
             style={{ borderRadius: 24 }}

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Play, RotateCcw } from "lucide-react";
 import { STEPS, type StepId, useExperience } from "@/lib/experience-store";
+import { useState, useEffect } from "react";
 
 export function StepNav({ current, nextLabel }: { current: StepId; nextLabel?: string }) {
   const complete = useExperience((s) => s.complete);
@@ -21,7 +22,7 @@ export function StepNav({ current, nextLabel }: { current: StepId; nextLabel?: s
         <span />
       )}
       {next ? (
-        <Link to={next.path} onClick={() => complete(current)} className="btn-primary">
+        <Link to={next.path} className="btn-primary">
           {nextLabel ?? `Continue to ${next.label}`}
           <ArrowRight className="size-4" />
         </Link>
@@ -54,18 +55,154 @@ export function SectionHeader({
   );
 }
 
-export function VideoBlock({ label = "Product demo" }: { label?: string }) {
+export function VideoBlock({
+  label = "Product demo",
+  onPlay,
+  onComplete,
+}: {
+  label?: string;
+  onPlay?: () => void;
+  onComplete?: () => void;
+}) {
+  const [status, setStatus] = useState<"idle" | "playing" | "completed">("idle");
+  const [progress, setProgress] = useState(0);
+  const [logIdx, setLogIdx] = useState(0);
+
+  const logs = [
+    "Establishing RFC connection to SAP S/4HANA...",
+    "Querying user master record database (2,408 active users)...",
+    "Running real-time Segregation of Duties (SoD) audit ruleset...",
+    "Analyzing license allocation (reclassifying 184 Professional licenses)...",
+    "Generating audit-ready compliance packages and evidence logs...",
+    "SecOps Optimization Sequence completed successfully.",
+  ];
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | undefined;
+    if (status === "playing") {
+      interval = setInterval(() => {
+        setProgress((p) => {
+          if (p >= 100) return 100;
+          return p + 2.5; // reaches 100% in 4 seconds
+        });
+      }, 100);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [status]);
+
+  useEffect(() => {
+    if (status === "playing") {
+      setLogIdx(Math.min(Math.floor((progress / 100) * logs.length), logs.length - 1));
+      if (progress >= 100) {
+        setStatus("completed");
+        onComplete?.();
+      }
+    }
+  }, [progress, status, logs.length, onComplete]);
+
+  const handlePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setStatus("playing");
+    setProgress(0);
+    setLogIdx(0);
+    onPlay?.();
+  };
+
+  const handleReset = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setStatus("playing");
+    setProgress(0);
+    setLogIdx(0);
+    onPlay?.();
+  };
+
   return (
-    <div className="relative aspect-video overflow-hidden rounded-3xl border border-border bg-foreground">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(32,76,237,0.35),transparent_60%)]" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-primary-foreground">
-        <div className="grid size-16 place-items-center rounded-full bg-primary/90 shadow-float">
-          <svg viewBox="0 0 24 24" className="ml-1 size-6 fill-white">
-            <path d="M8 5v14l11-7z" />
-          </svg>
+    <div className="relative aspect-video overflow-hidden rounded-3xl border border-border bg-foreground select-none">
+      {/* Background gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(32,76,237,0.2),transparent_60%)]" />
+
+      {status === "idle" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-primary-foreground">
+          <button
+            onClick={handlePlay}
+            className="grid size-16 place-items-center rounded-full bg-primary/95 text-primary-foreground shadow-float transition-all hover:bg-primary hover:scale-105 active:scale-95 group"
+            aria-label="Play Product Video Demo"
+          >
+            <Play className="ml-1 size-7 fill-white text-white" />
+          </button>
+          <div className="text-center">
+            <p className="text-base font-semibold tracking-tight text-white">{label}</p>
+            <p className="mt-1 text-xs text-muted-foreground/85">
+              Click to watch the interactive demonstration
+            </p>
+          </div>
         </div>
-        <p className="text-sm font-medium opacity-80">{label}</p>
-      </div>
+      )}
+
+      {status === "playing" && (
+        <div className="absolute inset-0 flex flex-col justify-between p-6 font-mono text-xs text-primary-foreground bg-black/40">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <span className="flex items-center gap-1.5 text-primary font-semibold">
+              <span className="size-2 rounded-full bg-primary animate-pulse" />
+              LIVE SIMULATION
+            </span>
+            <span className="text-caption font-semibold">{Math.round(progress)}%</span>
+          </div>
+
+          <div className="flex-1 flex flex-col justify-center space-y-2 max-w-lg mx-auto w-full text-left">
+            {logs.slice(0, logIdx + 1).map((log, index) => (
+              <div
+                key={index}
+                className={`transition-all duration-300 ${
+                  index === logIdx ? "text-primary font-medium" : "text-white/60"
+                }`}
+              >
+                <span className="text-primary mr-2 font-bold">&gt;</span>
+                {log}
+              </div>
+            ))}
+          </div>
+
+          {/* Player controls */}
+          <div className="space-y-2">
+            <div className="relative h-1 w-full rounded-full bg-white/20 overflow-hidden">
+              <div
+                className="absolute inset-y-0 left-0 bg-primary rounded-full transition-all duration-100"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-muted-foreground">
+              <span>0:00</span>
+              <span>SIMULATING SECURE AUDIT WORKFLOW</span>
+              <span>0:04</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {status === "completed" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-primary-foreground bg-black/65">
+          <div className="grid size-14 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <svg viewBox="0 0 24 24" className="size-6 stroke-2" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+          <div className="text-center">
+            <p className="text-base font-semibold text-white">Demonstration Completed</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Milestone Unlocked: First Video Watched
+            </p>
+          </div>
+          <button
+            onClick={handleReset}
+            className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold hover:bg-white/20 transition-all text-white"
+          >
+            <RotateCcw className="size-3.5" /> Replay Demo
+          </button>
+        </div>
+      )}
     </div>
   );
 }

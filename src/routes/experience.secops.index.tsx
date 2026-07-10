@@ -23,7 +23,7 @@ function Welcome() {
       <SectionHeader
         eyebrow="Step 1 · Welcome"
         title={`Welcome${user?.name ? `, ${user.name}` : ""}.`}
-        description="Here's your personalized SecOps Experience — a 10–15 minute guided briefing prepared for your organization."
+        description="Here's your personalized SecOps Experience — a 10–15 minute guided briefing for you."
       />
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">

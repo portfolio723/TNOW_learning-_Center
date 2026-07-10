@@ -35,17 +35,8 @@ function CapabilityPage() {
   const viewed = useExperience((s) => s.capabilitiesViewed);
   const incVideos = useExperience((s) => s.incVideos);
   const addAchievement = useExperience((s) => s.addAchievement);
+  const complete = useExperience((s) => s.complete);
   const isDone = viewed.includes(cap.id);
-
-  useEffect(() => {
-    // auto-mark on view for the demo
-    const t = setTimeout(() => {
-      markCapability(cap.id);
-      incVideos();
-      addAchievement("firstVideo");
-    }, 800);
-    return () => clearTimeout(t);
-  }, [cap.id, markCapability, incVideos, addAchievement]);
 
   const idx = CAPABILITIES.findIndex((c) => c.id === cap.id);
   const next = CAPABILITIES[idx + 1];
@@ -68,7 +59,17 @@ function CapabilityPage() {
       </div>
 
       <div className="mt-8">
-        <VideoBlock label={`${cap.title} · ${cap.duration}`} />
+        <VideoBlock
+          label={`${cap.title} · ${cap.duration}`}
+          onPlay={() => {
+            incVideos();
+            addAchievement("firstVideo");
+          }}
+          onComplete={() => {
+            markCapability(cap.id);
+            complete("tour");
+          }}
+        />
       </div>
 
       <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -105,7 +106,7 @@ function CapabilityPage() {
 
         <div className="space-y-4">
           <div
-            className="rounded-3xl border border-primary/20 bg-surface-alt p-6"
+            className="rounded-3xl border border-border bg-card p-6"
             style={{ borderRadius: 20 }}
           >
             <p className="text-xs font-medium uppercase tracking-widest text-primary">
@@ -132,7 +133,10 @@ function CapabilityPage() {
 
       <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
         <button
-          onClick={() => markCapability(cap.id)}
+          onClick={() => {
+            markCapability(cap.id);
+            complete("tour");
+          }}
           className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
             isDone
               ? "border-primary bg-primary/10 text-primary"

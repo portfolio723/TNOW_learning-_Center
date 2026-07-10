@@ -23,10 +23,7 @@ function WhyPage() {
   const [tab, setTab] = useState<"benefits" | "problems" | "solutions">("benefits");
   const incVideos = useExperience((s) => s.incVideos);
   const addAchievement = useExperience((s) => s.addAchievement);
-  useEffect(() => {
-    incVideos();
-    addAchievement("firstVideo");
-  }, [incVideos, addAchievement]);
+  const complete = useExperience((s) => s.complete);
 
   return (
     <div>
@@ -37,7 +34,16 @@ function WhyPage() {
       />
 
       <div className="mt-10">
-        <VideoBlock label="Why SecOps · 2:48" />
+        <VideoBlock
+          label="Why SecOps · 2:48"
+          onPlay={() => {
+            incVideos();
+            addAchievement("firstVideo");
+          }}
+          onComplete={() => {
+            complete("why");
+          }}
+        />
       </div>
 
       <div className="mt-10">
@@ -134,20 +140,6 @@ function WhyPage() {
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <div className="mt-12">
-        <h2 className="font-display text-xl font-semibold">What's covered</h2>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {CHECKLIST.map((c) => (
-            <span
-              key={c}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-alt px-3 py-1.5 text-xs font-medium text-foreground"
-            >
-              <Check className="size-3 text-primary" /> {c}
-            </span>
-          ))}
         </div>
       </div>
 

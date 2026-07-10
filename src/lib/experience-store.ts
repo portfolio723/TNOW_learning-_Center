@@ -87,9 +87,10 @@ export const useExperience = create<State>()(
   ),
 );
 
-export function useProgress() {
+export function useProgress(pathname?: string) {
   const completed = useExperience((s) => s.completed);
   const total = STEPS.length;
+
   const done = STEPS.filter((s) => completed[s.id]).length;
   return { done, total, pct: Math.round((done / total) * 100) };
 }

@@ -1,8 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { CalendarCheck, ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { CalendarCheck, ArrowLeft, Clock } from "lucide-react";
 import { SectionHeader } from "@/components/StepNav";
 import { useExperience } from "@/lib/experience-store";
+import { CAPABILITIES, STORIES } from "@/lib/experience-data";
 
 export const Route = createFileRoute("/experience/secops/book")({
   head: () => ({ meta: [{ title: "Book Workshop — SecOps Experience" }] }),
@@ -20,23 +21,112 @@ function BookPage() {
   } = useExperience();
   const [notes, setNotes] = useState("");
   const [slot, setSlot] = useState<string | null>(null);
+  const [showMore, setShowMore] = useState(false);
+  const [customBooking, setCustomBooking] = useState(false);
+  const [customDate, setCustomDate] = useState("");
+  const [customTime, setCustomTime] = useState("");
+  const [timezone, setTimezone] = useState(() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch {
+      return "America/New_York";
+    }
+  });
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    addAchievement("workshopReady");
-  }, [addAchievement]);
-
-  const slots = [
-    "Tue · Nov 25 · 10:00",
-    "Wed · Nov 26 · 14:00",
-    "Thu · Nov 27 · 09:30",
-    "Fri · Nov 28 · 16:00",
+  const commonTimezones = [
+    { value: "America/New_York", label: "US Eastern Time (EST/EDT)" },
+    { value: "America/Chicago", label: "US Central Time (CST/CDT)" },
+    { value: "America/Denver", label: "US Mountain Time (MST/MDT)" },
+    { value: "America/Los_Angeles", label: "US Pacific Time (PST/PDT)" },
+    { value: "Europe/London", label: "London (GMT/BST)" },
+    { value: "Europe/Paris", label: "Paris (CET/CEST)" },
+    { value: "Asia/Kolkata", label: "India (IST)" },
+    { value: "Asia/Singapore", label: "Singapore (SGT)" },
+    { value: "Australia/Sydney", label: "Sydney (AEST/AEDT)" },
   ];
 
+  // Helper to generate next few business days
+  const getUpcomingSlots = () => {
+    const slotsList: string[] = [];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const current = new Date();
+    let addedDays = 0;
+
+    for (let i = 1; addedDays < 5 && i < 15; i++) {
+      const nextDate = new Date(current);
+      nextDate.setDate(current.getDate() + i);
+
+      // Skip weekends for professional enterprise sales
+      if (nextDate.getDay() === 0 || nextDate.getDay() === 6) {
+        continue;
+      }
+
+      addedDays++;
+      const dayName = days[nextDate.getDay()];
+      const monthName = months[nextDate.getMonth()];
+      const dayNum = nextDate.getDate();
+      const dateStr = `${dayName} · ${monthName} ${dayNum}`;
+
+      // Standard professional times slots
+      slotsList.push(`${dateStr} · 09:30`);
+      slotsList.push(`${dateStr} · 11:00`);
+      slotsList.push(`${dateStr} · 14:00`);
+      slotsList.push(`${dateStr} · 15:30`);
+    }
+    return slotsList;
+  };
+
+  const allSlots = getUpcomingSlots();
+  const visibleSlots = showMore ? allSlots.slice(0, 12) : allSlots.slice(0, 4);
+
   function schedule() {
+    addAchievement("workshopReady");
     complete("book");
     navigate({ to: "/experience/secops/success" });
   }
+
+  const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (customDate && customTime) {
+      // Format as "Mon · Jul 13 · 10:30"
+      const d = new Date(customDate + "T" + customTime);
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const formattedSlot = `${days[d.getDay()]} · ${months[d.getMonth()]} ${d.getDate()} · ${customTime}`;
+      setSlot(formattedSlot);
+      setCustomBooking(false);
+    }
+  };
 
   return (
     <div>
@@ -52,23 +142,139 @@ function BookPage() {
             className="rounded-3xl border border-border bg-card p-6"
             style={{ borderRadius: 20 }}
           >
-            <p className="font-display text-lg font-semibold">Pick a time</p>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {slots.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSlot(s)}
-                  className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
-                    slot === s
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-border bg-background text-foreground hover:border-primary/30"
-                  }`}
-                  style={{ borderRadius: 16 }}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/50 pb-4">
+              <div>
+                <p className="font-display text-lg font-semibold">Pick a time</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Select from our available consultant times
+                </p>
+              </div>
+
+              {/* Timezone Selector */}
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="tz-select"
+                  className="text-[10px] font-semibold text-caption uppercase tracking-wider"
                 >
-                  {s}
-                </button>
-              ))}
+                  Timezone
+                </label>
+                <select
+                  id="tz-select"
+                  value={timezone}
+                  onChange={(e) => setTimezone(e.target.value)}
+                  className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary/25"
+                >
+                  {commonTimezones.map((tz) => (
+                    <option key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+
+            {customBooking ? (
+              <form
+                onSubmit={handleCustomSubmit}
+                className="mt-6 space-y-4 rounded-2xl bg-card p-5 border border-border"
+              >
+                <p className="font-display text-sm font-semibold">Request a custom date & time</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={customDate}
+                      onChange={(e) => setCustomDate(e.target.value)}
+                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-semibold text-caption uppercase tracking-wider block mb-1">
+                      Time
+                    </label>
+                    <input
+                      type="time"
+                      required
+                      value={customTime}
+                      onChange={(e) => setCustomTime(e.target.value)}
+                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setCustomBooking(false)}
+                    className="rounded-full border border-border bg-background px-4 py-1.5 text-xs font-semibold hover:bg-surface"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-full bg-primary text-primary-foreground px-4 py-1.5 text-xs font-semibold hover:bg-primary-hover"
+                  >
+                    Confirm Custom Time
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {visibleSlots.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setSlot(s)}
+                      className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                        slot === s
+                          ? "border-primary bg-primary/5 text-primary ring-1 ring-primary/30"
+                          : "border-border bg-background text-foreground hover:border-primary/30"
+                      }`}
+                      style={{ borderRadius: 16 }}
+                    >
+                      <span className="font-medium">{s}</span>
+                      <span className="block text-[10px] text-muted-foreground mt-0.5">
+                        Consultant available
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/30">
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-xs font-semibold text-primary hover:underline"
+                  >
+                    {showMore ? "Show fewer times" : "Show more times..."}
+                  </button>
+                  <button
+                    onClick={() => setCustomBooking(true)}
+                    className="text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    Request a custom time instead
+                  </button>
+                </div>
+              </>
+            )}
+
+            {slot && (
+              <div className="mt-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-emerald-600 uppercase tracking-wider">
+                    Selected slot
+                  </p>
+                  <p className="text-sm font-semibold text-foreground mt-0.5">{slot}</p>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  Times in{" "}
+                  {commonTimezones.find((t) => t.value === timezone)?.label.split(" (")[0] ||
+                    timezone}
+                </span>
+              </div>
+            )}
           </div>
 
           <div
@@ -102,22 +308,87 @@ function BookPage() {
         </div>
 
         <aside
-          className="rounded-3xl border border-primary/20 bg-surface-alt p-6"
+          className="rounded-3xl border border-border bg-card p-6 self-start"
           style={{ borderRadius: 20 }}
         >
           <p className="text-xs font-medium uppercase tracking-widest text-primary">
             Your progress
           </p>
-          <ul className="mt-4 space-y-3 text-sm">
+          <ul className="mt-4 space-y-3 text-sm border-b border-border/60 pb-5">
             <Row label="Videos watched" value={videosWatched} />
             <Row label="Customer stories" value={storiesRead.length} />
             <Row label="Questions asked" value={aiQuestionsAsked} />
             <Row label="Capabilities explored" value={capabilitiesViewed.length} />
           </ul>
-          <div className="mt-6 rounded-2xl bg-background p-4">
-            <p className="text-xs text-caption">
-              Your session summary will be shared with your consultant so the workshop is 100%
-              relevant.
+
+          <div className="mt-5">
+            <p className="text-xs font-bold text-foreground uppercase tracking-widest">
+              Consultant Prep Agenda
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              This workspace telemetry will personalize your briefing:
+            </p>
+
+            <div className="mt-3.5 space-y-3 text-xs text-muted-foreground">
+              {capabilitiesViewed.length > 0 ? (
+                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <span className="block font-medium text-foreground mb-0.5">
+                      Explored Capabilities:
+                    </span>
+                    <span className="text-[11px] leading-relaxed">
+                      {capabilitiesViewed
+                        .map((id) => CAPABILITIES.find((c) => c.id === id)?.title)
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex gap-2 bg-background/50 p-3 rounded-xl border border-border/30 italic">
+                  <span>-</span>
+                  <span>No specific product capabilities viewed yet.</span>
+                </div>
+              )}
+
+              {storiesRead.length > 0 ? (
+                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <span className="block font-medium text-foreground mb-0.5">
+                      Customer Cases Reviewed:
+                    </span>
+                    <span className="text-[11px] leading-relaxed">
+                      {storiesRead
+                        .map((id) => STORIES.find((s) => s.id === id)?.company)
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+
+              {aiQuestionsAsked > 0 ? (
+                <div className="flex gap-2 bg-background p-3 rounded-xl border border-border/50">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <span className="block font-medium text-foreground mb-0.5">
+                      AI Expert Interactions:
+                    </span>
+                    <span className="text-[11px]">
+                      Logged {aiQuestionsAsked} technical and compliance inquiries.
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-2xl bg-primary/5 p-4 border border-primary/10">
+            <p className="text-[11px] leading-relaxed text-caption">
+              Your session exploration history is saved securely and will be pre-briefed to your SAP
+              security architect ahead of your call.
             </p>
           </div>
         </aside>

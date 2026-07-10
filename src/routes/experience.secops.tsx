@@ -13,16 +13,17 @@ import {
 } from "@phosphor-icons/react";
 import { STEPS, useExperience, useProgress } from "@/lib/experience-store";
 import { AI_ANSWERS, AI_SUGGESTIONS } from "@/lib/experience-data";
+import { UserProfileMenu } from "@/components/UserProfileMenu";
 
 export const Route = createFileRoute("/experience/secops")({
   component: SecOpsLayout,
 });
 
 function SecOpsLayout() {
-  const { pct, done, total } = useProgress();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pct, done, total } = useProgress(pathname);
   const user = useExperience((s) => s.user);
   const completed = useExperience((s) => s.completed);
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const matches = useMatches();
   const [aiOpen, setAiOpen] = useState(false);
 
@@ -64,24 +65,14 @@ function SecOpsLayout() {
             )}
           </div>
 
-          <div className="hidden flex-1 items-center gap-3 md:flex">
-            <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-              <div
-                className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-500"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-            <span className="text-xs font-medium tabular-nums text-muted-foreground">{pct}%</span>
+          <div className="hidden items-center gap-2 md:flex">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+              {pct}% Complete
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="hidden text-xs text-caption md:inline">{user?.name ?? "Guest"}</span>
-            <Link
-              to="/experience"
-              className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-            >
-              <X className="size-3.5" /> Exit
-            </Link>
+            <UserProfileMenu />
           </div>
         </div>
       </header>
@@ -98,9 +89,7 @@ function SecOpsLayout() {
                 <Clock className="size-3" /> ~12 min
               </span>
             </div>
-            <p className="mt-2 font-display text-lg font-semibold">
-              {done}/{total} complete
-            </p>
+            <p className="mt-2 font-display text-lg font-semibold">{pct}% Complete</p>
             <div className="mt-2 h-1 overflow-hidden rounded-full bg-border">
               <div
                 className="h-full rounded-full bg-primary transition-all"
@@ -111,7 +100,7 @@ function SecOpsLayout() {
             <nav className="mt-6 space-y-1">
               {STEPS.map((s, i) => {
                 const isActive = currentStep.id === s.id;
-                const isDone = completed[s.id];
+                const isDone = pathname.includes("/success") || completed[s.id];
                 return (
                   <Link
                     key={s.id}
@@ -212,6 +201,7 @@ function AiDrawer({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState("");
   const incAi = useExperience((s) => s.incAi);
   const addAchievement = useExperience((s) => s.addAchievement);
+  const complete = useExperience((s) => s.complete);
 
   function send(q: string) {
     if (!q.trim()) return;
@@ -222,6 +212,7 @@ function AiDrawer({ onClose }: { onClose: () => void }) {
     setInput("");
     incAi();
     addAchievement("firstAi");
+    complete("ai");
   }
 
   return (

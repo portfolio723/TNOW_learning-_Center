@@ -61,7 +61,7 @@ export const Route = createFileRoute("/login")({
       {
         name: "description",
         content:
-          "Sign in to your personalized ToggleNow Experience Center — a private, guided SAP Security & Governance briefing prepared for your organization.",
+          "Sign in to your personalized ToggleNow Experience Center — a private, guided SAP Security & Governance briefing for you.",
       },
     ],
   }),
@@ -70,15 +70,34 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [isNameModified, setIsNameModified] = useState(false);
   const [otp, setOtp] = useState("");
   const [stage, setStage] = useState<"email" | "otp">("email");
   const [loading, setLoading] = useState(false);
   const setUser = useExperience((s) => s.setUser);
+  const reset = useExperience((s) => s.reset);
   const navigate = useNavigate();
+
+  function handleEmailChange(val: string) {
+    setEmail(val);
+    if (!isNameModified && val) {
+      const candidate = val
+        .split("@")[0]
+        .replace(/[0-9]/g, "") // remove numeric digits (e.g. 723ms -> ms)
+        .replace(/grc|basis|sap|it|admin|dev/gi, "") // strip common robotic/system labels
+        .replace(/[._]/g, " ") // replace dots and underscores with spaces
+        .trim();
+
+      const cleanCandidate =
+        candidate.length > 1 ? candidate : val.split("@")[0].replace(/[._]/g, " ");
+      setName(capitalize(cleanCandidate));
+    }
+  }
 
   function sendOtp(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !name) return;
     setLoading(true);
     setTimeout(() => {
       setStage("otp");
@@ -90,8 +109,8 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
-      const name = email.split("@")[0].replace(/[._]/g, " ");
-      setUser({ email, name: capitalize(name) });
+      reset(); // Reset all cached state, achievements, and steps from previous sessions
+      setUser({ email, name: name.trim() || "Guest User" });
       navigate({ to: "/experience" });
     }, 400);
   }
@@ -114,26 +133,45 @@ function LoginPage() {
                 Welcome to ToggleNow
               </h1>
               <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-                Explore enterprise SAP products prepared specifically for your organization.
+                Explore enterprise SAP products for you.
               </p>
 
               <div className="mt-8 rounded-2xl border border-border bg-background p-6 shadow-soft">
                 {stage === "email" ? (
                   <form onSubmit={sendOtp} className="space-y-4">
-                    <label className="block text-sm font-medium text-foreground">Work email</label>
-                    <input
-                      type="email"
-                      required
-                      autoFocus
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@company.com"
-                      className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-[15px] outline-none transition placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
-                      style={{ borderRadius: 16 }}
-                    />
+                    <div className="space-y-1.5">
+                      <label className="block text-sm font-medium text-foreground">Your Name</label>
+                      <input
+                        type="text"
+                        required
+                        autoFocus
+                        value={name}
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          setIsNameModified(true);
+                        }}
+                        placeholder="e.g. Sarah"
+                        className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-[15px] outline-none transition placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+                        style={{ borderRadius: 16 }}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="block text-sm font-medium text-foreground">
+                        Work email
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => handleEmailChange(e.target.value)}
+                        placeholder="you@company.com"
+                        className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-[15px] outline-none transition placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+                        style={{ borderRadius: 16 }}
+                      />
+                    </div>
                     <button
                       type="submit"
-                      disabled={loading}
+                      disabled={loading || !email || !name}
                       className="btn-primary w-full disabled:opacity-60"
                     >
                       {loading ? "Sending code…" : "Continue"}
@@ -141,28 +179,30 @@ function LoginPage() {
                   </form>
                 ) : (
                   <form onSubmit={verifyOtp} className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-sm font-medium text-foreground">
-                        One-time code
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setStage("email")}
-                        className="text-xs text-caption hover:text-foreground"
-                      >
-                        Change email
-                      </button>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium text-foreground">
+                          One-time code
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setStage("email")}
+                          className="text-xs text-caption hover:text-foreground"
+                        >
+                          Change email
+                        </button>
+                      </div>
+                      <input
+                        inputMode="numeric"
+                        autoFocus
+                        maxLength={6}
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                        placeholder="6-digit code"
+                        className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                        style={{ borderRadius: 16 }}
+                      />
                     </div>
-                    <input
-                      inputMode="numeric"
-                      autoFocus
-                      maxLength={6}
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                      placeholder="6-digit code"
-                      className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                      style={{ borderRadius: 16 }}
-                    />
                     <p className="text-xs text-caption">
                       Sent to <span className="text-foreground">{email}</span>. Use any 6 digits for
                       the demo.

@@ -22,6 +22,7 @@ function AiPage() {
   const [input, setInput] = useState("");
   const incAi = useExperience((s) => s.incAi);
   const addAchievement = useExperience((s) => s.addAchievement);
+  const complete = useExperience((s) => s.complete);
 
   function send(q: string) {
     if (!q.trim()) return;
@@ -32,6 +33,7 @@ function AiPage() {
     setInput("");
     incAi();
     addAchievement("firstAi");
+    complete("ai");
   }
 
   const topics = Array.from(new Set(AI_SUGGESTIONS.map((s) => s.topic)));
@@ -68,7 +70,7 @@ function AiPage() {
             </ul>
           </div>
           <div
-            className="rounded-3xl border border-border bg-surface-alt p-5"
+            className="rounded-3xl border border-border bg-card p-5"
             style={{ borderRadius: 20 }}
           >
             <p className="text-xs font-medium uppercase tracking-widest text-primary">
