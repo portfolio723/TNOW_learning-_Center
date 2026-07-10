@@ -144,7 +144,7 @@ function SecOpsLayout() {
         </aside>
 
         {/* Main content */}
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 pb-24 md:pb-16">
           <div className="fade-up">
             <Outlet />
           </div>
@@ -154,11 +154,11 @@ function SecOpsLayout() {
       {/* Persistent AI drawer */}
       <button
         onClick={() => setAiOpen(true)}
-        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-float transition hover:bg-primary-hover"
+        className="fixed bottom-6 right-6 z-40 inline-flex size-12 md:size-auto md:h-auto items-center justify-center md:justify-start gap-2 rounded-full bg-primary p-3 md:px-5 md:py-3 text-sm font-medium text-primary-foreground shadow-float transition hover:bg-primary-hover hover:scale-105 active:scale-95"
         aria-label="Open AI Expert"
       >
-        <Sparkle className="size-4" />
-        Ask AI Expert
+        <Sparkle className="size-5 md:size-4" weight="fill" />
+        <span className="hidden md:inline">Ask AI Expert</span>
       </button>
       {aiOpen && <AiDrawer onClose={() => setAiOpen(false)} />}
     </div>

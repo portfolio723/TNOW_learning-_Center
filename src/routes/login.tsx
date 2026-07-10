@@ -101,100 +101,102 @@ function LoginPage() {
       <div className="grid min-h-dvh lg:grid-cols-5">
         {/* Left — Login */}
         <section className="flex flex-col justify-between px-6 py-10 lg:col-span-2 lg:px-14">
-          <div className="flex items-center">
-            <img src="/logo.png" alt="ToggleNow" className="h-8 w-auto object-contain" />
-          </div>
-
-          <div className="mx-auto w-full max-w-sm py-16">
-            <p className="mb-3 text-xs font-medium uppercase tracking-widest text-caption">
-              Experience Center
-            </p>
-            <h1 className="font-display text-4xl font-semibold leading-tight">
-              Welcome to ToggleNow
-            </h1>
-            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
-              Explore enterprise SAP products prepared specifically for your organization.
-            </p>
-
-            <div className="mt-8 rounded-2xl border border-border bg-background p-6 shadow-soft">
-              {stage === "email" ? (
-                <form onSubmit={sendOtp} className="space-y-4">
-                  <label className="block text-sm font-medium text-foreground">Work email</label>
-                  <input
-                    type="email"
-                    required
-                    autoFocus
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@company.com"
-                    className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-[15px] outline-none transition placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
-                    style={{ borderRadius: 16 }}
-                  />
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn-primary w-full disabled:opacity-60"
-                  >
-                    {loading ? "Sending code…" : "Continue"}
-                  </button>
-                </form>
-              ) : (
-                <form onSubmit={verifyOtp} className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-sm font-medium text-foreground">
-                      One-time code
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setStage("email")}
-                      className="text-xs text-caption hover:text-foreground"
-                    >
-                      Change email
-                    </button>
-                  </div>
-                  <input
-                    inputMode="numeric"
-                    autoFocus
-                    maxLength={6}
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                    placeholder="6-digit code"
-                    className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-                    style={{ borderRadius: 16 }}
-                  />
-                  <p className="text-xs text-caption">
-                    Sent to <span className="text-foreground">{email}</span>. Use any 6 digits for
-                    the demo.
-                  </p>
-                  <button
-                    type="submit"
-                    disabled={loading || otp.length < 4}
-                    className="btn-primary w-full disabled:opacity-60"
-                  >
-                    {loading ? "Verifying…" : "Verify & enter"}
-                  </button>
-                </form>
-              )}
-
-              <ul className="mt-6 grid grid-cols-2 gap-3 text-xs text-caption">
-                {[
-                  { icon: SealCheck, label: "SAP Certified Partner" },
-                  { icon: LockSimple, label: "Secure session" },
-                  { icon: ShieldCheck, label: "Private experience" },
-                  { icon: Buildings, label: "Prepared for your company" },
-                ].map((t) => (
-                  <li key={t.label} className="flex items-center gap-2">
-                    <t.icon className="size-3.5 text-primary" weight="bold" />
-                    {t.label}
-                  </li>
-                ))}
-              </ul>
+          <div className="mx-auto flex h-full w-full max-w-sm flex-col justify-between gap-12">
+            <div className="flex items-center">
+              <img src="/logo.png" alt="ToggleNow" className="h-8 w-auto object-contain" />
             </div>
-          </div>
 
-          <p className="text-xs text-caption">
-            © {new Date().getFullYear()} ToggleNow · SAP Security & Governance
-          </p>
+            <div className="w-full">
+              <p className="mb-3 text-xs font-medium uppercase tracking-widest text-caption">
+                Experience Center
+              </p>
+              <h1 className="font-display text-4xl font-semibold leading-tight">
+                Welcome to ToggleNow
+              </h1>
+              <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+                Explore enterprise SAP products prepared specifically for your organization.
+              </p>
+
+              <div className="mt-8 rounded-2xl border border-border bg-background p-6 shadow-soft">
+                {stage === "email" ? (
+                  <form onSubmit={sendOtp} className="space-y-4">
+                    <label className="block text-sm font-medium text-foreground">Work email</label>
+                    <input
+                      type="email"
+                      required
+                      autoFocus
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@company.com"
+                      className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-[15px] outline-none transition placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+                      style={{ borderRadius: 16 }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="btn-primary w-full disabled:opacity-60"
+                    >
+                      {loading ? "Sending code…" : "Continue"}
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={verifyOtp} className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-sm font-medium text-foreground">
+                        One-time code
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setStage("email")}
+                        className="text-xs text-caption hover:text-foreground"
+                      >
+                        Change email
+                      </button>
+                    </div>
+                    <input
+                      inputMode="numeric"
+                      autoFocus
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                      placeholder="6-digit code"
+                      className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-center text-lg tracking-[0.5em] outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+                      style={{ borderRadius: 16 }}
+                    />
+                    <p className="text-xs text-caption">
+                      Sent to <span className="text-foreground">{email}</span>. Use any 6 digits for
+                      the demo.
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={loading || otp.length < 4}
+                      className="btn-primary w-full disabled:opacity-60"
+                    >
+                      {loading ? "Verifying…" : "Verify & enter"}
+                    </button>
+                  </form>
+                )}
+
+                <ul className="mt-6 grid grid-cols-2 gap-3 text-xs text-caption">
+                  {[
+                    { icon: SealCheck, label: "SAP Certified Partner" },
+                    { icon: LockSimple, label: "Secure session" },
+                    { icon: ShieldCheck, label: "Private experience" },
+                    { icon: Buildings, label: "Prepared for your company" },
+                  ].map((t) => (
+                    <li key={t.label} className="flex items-center gap-2">
+                      <t.icon className="size-3.5 text-primary" weight="bold" />
+                      {t.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <p className="text-xs text-caption">
+              © {new Date().getFullYear()} ToggleNow · SAP Security & Governance
+            </p>
+          </div>
         </section>
 
         {/* Right — Showcase */}
