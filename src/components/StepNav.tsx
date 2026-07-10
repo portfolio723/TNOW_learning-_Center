@@ -82,27 +82,22 @@ export function VideoBlock({
     if (status === "playing") {
       interval = setInterval(() => {
         setProgress((p) => {
-          if (p >= 100) return 100;
-          return p + 2.5; // reaches 100% in 4 seconds
+          if (p >= 100) {
+            if (interval) clearInterval(interval);
+            setStatus("completed");
+            onComplete?.();
+            return 100;
+          }
+          const nextP = p + 2.5; // reaches 100% in 4 seconds
+          setLogIdx(Math.min(Math.floor((nextP / 100) * logs.length), logs.length - 1));
+          return nextP;
         });
       }, 100);
     }
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [status]);
-
-  useEffect(() => {
-    if (status === "playing") {
-      setLogIdx(Math.min(Math.floor((progress / 100) * logs.length), logs.length - 1));
-      if (progress >= 100) {
-        setStatus("completed");
-        setTimeout(() => {
-          onComplete?.();
-        }, 0);
-      }
-    }
-  }, [progress, status, logs.length, onComplete]);
+  }, [status, logs.length, onComplete]);
 
   const handlePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
