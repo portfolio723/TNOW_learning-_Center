@@ -119,7 +119,7 @@ function LoginPage() {
     <main className="min-h-dvh bg-background text-foreground">
       <div className="grid min-h-dvh lg:grid-cols-5">
         {/* Left — Showcase */}
-        <aside className="hidden bg-surface-alt lg:col-span-3 lg:block">
+        <aside className="hidden bg-gradient-to-br from-primary to-[#0f2cb0] lg:col-span-3 lg:block">
           <div className="flex h-full flex-col justify-between px-14 py-14">
             <ShowcaseIllustration />
 
@@ -147,18 +147,21 @@ function LoginPage() {
                     desc: "Firefighter with policy-safe approvals.",
                   },
                 ].map((f) => (
-                  <div key={f.title} className="rounded-2xl border border-border bg-background p-4">
-                    <f.icon className="size-5 text-primary" weight="duotone" />
-                    <p className="mt-3 text-sm font-medium text-foreground">{f.title}</p>
-                    <p className="mt-1 text-xs text-caption">{f.desc}</p>
+                  <div
+                    key={f.title}
+                    className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+                  >
+                    <f.icon className="size-5 text-blue-300" weight="duotone" />
+                    <p className="mt-3 text-sm font-medium text-white">{f.title}</p>
+                    <p className="mt-1 text-xs text-blue-100/80">{f.desc}</p>
                   </div>
                 ))}
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-4">
-                <Stat kpi="50%" label="Reduction in tickets" />
-                <Stat kpi="Days → Minutes" label="Provisioning" />
-                <Stat kpi="100%" label="Audit ready" />
+                <Stat kpi="50%" label="Reduction in tickets" onBlue />
+                <Stat kpi="Days → Minutes" label="Provisioning" onBlue />
+                <Stat kpi="100%" label="Audit ready" onBlue />
               </div>
             </div>
           </div>
@@ -289,11 +292,17 @@ function LoginPage() {
   );
 }
 
-function Stat({ kpi, label }: { kpi: string; label: string }) {
+function Stat({ kpi, label, onBlue = false }: { kpi: string; label: string; onBlue?: boolean }) {
   return (
-    <div className="rounded-2xl border border-border bg-background p-4">
-      <p className="font-display text-xl font-semibold text-foreground">{kpi}</p>
-      <p className="mt-1 text-xs text-caption">{label}</p>
+    <div
+      className={`rounded-2xl border p-4 ${onBlue ? "border-white/10 bg-white/5 backdrop-blur-sm" : "border-border bg-background"}`}
+    >
+      <p
+        className={`font-display text-xl font-semibold ${onBlue ? "text-white" : "text-foreground"}`}
+      >
+        {kpi}
+      </p>
+      <p className={`mt-1 text-xs ${onBlue ? "text-blue-100" : "text-caption"}`}>{label}</p>
     </div>
   );
 }
@@ -313,12 +322,12 @@ function ShowcaseIllustration() {
   return (
     <div className="relative flex flex-col items-center justify-center flex-1 h-full max-w-xl mx-auto py-12 px-2">
       {/* Background Radial Glow */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(32,76,237,0.08),transparent_70%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)]" />
 
       {/* Outer elegant container with perfect balance and visual hierarchy */}
-      <div className="w-full relative min-h-[340px] flex flex-col justify-between rounded-3xl border border-border/80 bg-background/60 p-8 shadow-float backdrop-blur-sm">
+      <div className="w-full relative min-h-[340px] flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 shadow-float backdrop-blur-sm">
         <div className="absolute top-6 right-6">
-          <Quotes className="size-10 text-primary/10" weight="fill" />
+          <Quotes className="size-10 text-white/10" weight="fill" />
         </div>
 
         <div className="relative overflow-hidden flex-1 flex flex-col justify-center">
@@ -335,34 +344,34 @@ function ShowcaseIllustration() {
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
                   {[...Array(current.rating)].map((_, i) => (
-                    <Star key={i} className="size-4 text-amber-500" weight="fill" />
+                    <Star key={i} className="size-4 text-amber-400" weight="fill" />
                   ))}
                 </div>
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white border border-white/10">
                   {current.stat}
                 </span>
               </div>
 
               {/* Testimonial Quote */}
-              <blockquote className="text-[17px] font-display font-medium leading-relaxed text-foreground tracking-tight md:text-[19px]">
+              <blockquote className="text-[17px] font-display font-medium leading-relaxed text-white tracking-tight md:text-[19px]">
                 "{current.quote}"
               </blockquote>
 
               {/* Author details with elegant visual hierarchy */}
-              <div className="flex items-center gap-3 mt-2 border-t border-border/50 pt-4">
-                <div className="grid size-10 place-items-center rounded-full bg-primary/10 text-primary font-display font-semibold text-sm">
+              <div className="flex items-center gap-3 mt-2 border-t border-white/10 pt-4">
+                <div className="grid size-10 place-items-center rounded-full bg-white/10 text-white font-display font-semibold text-sm">
                   {current.author
                     .split(" ")
                     .map((n) => n[0])
                     .join("")}
                 </div>
                 <div>
-                  <cite className="not-italic text-sm font-semibold text-foreground block">
+                  <cite className="not-italic text-sm font-semibold text-white block">
                     {current.author}
                   </cite>
-                  <span className="text-xs text-caption block">
+                  <span className="text-xs text-blue-100 block">
                     {current.role} ·{" "}
-                    <strong className="font-medium text-muted-foreground">{current.company}</strong>
+                    <strong className="font-medium text-blue-200">{current.company}</strong>
                   </span>
                 </div>
               </div>
@@ -378,7 +387,7 @@ function ShowcaseIllustration() {
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300 bg-border focus:outline-none"
+                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300 bg-white/20 focus:outline-none"
                 style={{ width: isActive ? "32px" : "8px" }}
                 aria-label={`Go to slide ${i + 1}`}
               >
@@ -387,7 +396,7 @@ function ShowcaseIllustration() {
                     initial={{ left: "-100%" }}
                     animate={{ left: "0%" }}
                     transition={{ duration: 5.5, ease: "linear" }}
-                    className="absolute inset-y-0 left-0 bg-primary w-full"
+                    className="absolute inset-y-0 left-0 bg-white w-full"
                   />
                 )}
               </button>
