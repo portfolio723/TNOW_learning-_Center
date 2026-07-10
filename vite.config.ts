@@ -13,10 +13,15 @@ export default defineConfig({
     server: { entry: "server" },
   },
   nitro: {
-    output: {
-      dir: "dist",
-      serverDir: "dist/server",
-      publicDir: "dist/client",
-    },
+    preset: process.env.VERCEL ? "vercel" : undefined,
+    ...(process.env.VERCEL
+      ? {}
+      : {
+          output: {
+            dir: "dist",
+            serverDir: "dist/server",
+            publicDir: "dist/client",
+          },
+        }),
   },
 });
