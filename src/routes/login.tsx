@@ -1,58 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import {
-  ShieldCheck,
-  Lightning,
-  Key,
-  UserGear,
-  Sparkle,
-  LockSimple,
-  Buildings,
-  SealCheck,
-  Quotes,
-  Star,
-} from "@phosphor-icons/react";
+import { useState } from "react";
+import { ShieldCheck, LockSimple, Buildings, SealCheck } from "@phosphor-icons/react";
 import { useExperience } from "@/lib/experience-store";
-import { AnimatePresence, motion } from "motion/react";
-
-const REVIEWS = [
-  {
-    quote:
-      "SecOps completely transformed our S/4HANA migration. We went from days to minutes in user provisioning while keeping our audit completely clean.",
-    author: "Sarah Jenkins",
-    role: "VP of IT Infrastructure",
-    company: "Global Foods Inc.",
-    stat: "94% faster provisioning",
-    rating: 5,
-  },
-  {
-    quote:
-      "The real-time Segregation of Duties (SoD) simulation caught three critical conflicts before they ever hit production. It's an indispensable tool for our compliance.",
-    author: "Marcus Vance",
-    role: "Chief Information Security Officer",
-    company: "Centria Health",
-    stat: "Zero audit findings",
-    rating: 5,
-  },
-  {
-    quote:
-      "By automatically analyzing actual usage against our SAP licensing tier, SecOps saved us $1.8M in our annual SAP true-up. The ROI was virtually immediate.",
-    author: "David Cho",
-    role: "Director of SAP Basis",
-    company: "Aether Automotive",
-    stat: "$1.8M saved on true-up",
-    rating: 5,
-  },
-  {
-    quote:
-      "Self-service access with automated role reviews solved our emergency access bottlenecks. Business users are happy, and audit trails are completely foolproof.",
-    author: "Elena Rostova",
-    role: "VP of Global Compliance & GRC",
-    company: "FinTech Union",
-    stat: "100% automated logging",
-    rating: 5,
-  },
-];
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -119,49 +68,88 @@ function LoginPage() {
     <main className="min-h-dvh bg-background text-foreground">
       <div className="grid min-h-dvh lg:grid-cols-5">
         {/* Left — Showcase */}
-        <aside className="hidden bg-gradient-to-br from-primary to-[#0f2cb0] lg:col-span-3 lg:block">
-          <div className="flex h-full flex-col justify-between px-14 py-14">
-            <ShowcaseIllustration />
+        <aside
+          className="relative hidden lg:col-span-3 lg:flex flex-col items-center justify-center p-14 overflow-hidden select-none"
+          style={{
+            backgroundColor: "#2054E3",
+            background:
+              "radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.45) 0%, rgba(192, 132, 252, 0.45) 25%, rgba(37, 99, 235, 0) 70%), radial-gradient(circle at top left, rgba(56, 189, 248, 0.5) 0%, rgba(37, 99, 235, 0) 60%), #2054E3",
+          }}
+        >
+          {/* White Grid Lines */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.25) 1px, transparent 1px),
+                               linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 1px, transparent 1px)`,
+              backgroundSize: "90px 90px",
+              backgroundPosition: "center center",
+            }}
+          />
 
-            <div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  {
-                    icon: UserGear,
-                    title: "Self-Service Access",
-                    desc: "Branded catalog for business users.",
-                  },
-                  {
-                    icon: ShieldCheck,
-                    title: "Segregation of Duties",
-                    desc: "Simulate conflicts before they happen.",
-                  },
-                  {
-                    icon: Sparkle,
-                    title: "License Optimization",
-                    desc: "Right-size SAP licenses automatically.",
-                  },
-                  {
-                    icon: Key,
-                    title: "Emergency Access",
-                    desc: "Firefighter with policy-safe approvals.",
-                  },
-                ].map((f) => (
-                  <div
-                    key={f.title}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
-                  >
-                    <f.icon className="size-5 text-blue-300" weight="duotone" />
-                    <p className="mt-3 text-sm font-medium text-white">{f.title}</p>
-                    <p className="mt-1 text-xs text-blue-100/80">{f.desc}</p>
-                  </div>
-                ))}
-              </div>
+          {/* Testimonial Card */}
+          <div
+            className="relative w-full max-w-lg rounded-3xl border border-white/15 bg-white/10 p-10 shadow-2xl backdrop-blur-md flex flex-col justify-between"
+            style={{ borderRadius: 24 }}
+          >
+            {/* Litmus Logo */}
+            <div className="flex items-center gap-3">
+              <svg
+                className="size-8 text-white shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g fill="currentColor">
+                  {Array.from({ length: 12 }).map((_, i) => {
+                    const angle = (i * 30 * Math.PI) / 180;
+                    const x1 = 12 + 4 * Math.cos(angle);
+                    const y1 = 12 + 4 * Math.sin(angle);
+                    const x2 = 12 + 9.5 * Math.cos(angle);
+                    const y2 = 12 + 9.5 * Math.sin(angle);
 
-              <div className="mt-6 grid grid-cols-3 gap-4">
-                <Stat kpi="50%" label="Reduction in tickets" onBlue />
-                <Stat kpi="Days → Minutes" label="Provisioning" onBlue />
-                <Stat kpi="100%" label="Audit ready" onBlue />
+                    const nextAngle = ((i + 0.65) * 30 * Math.PI) / 180;
+                    const x3 = 12 + 9.5 * Math.cos(nextAngle);
+                    const y3 = 12 + 9.5 * Math.sin(nextAngle);
+                    const x4 = 12 + 4 * Math.cos(nextAngle);
+                    const y4 = 12 + 4 * Math.sin(nextAngle);
+
+                    return (
+                      <path
+                        key={i}
+                        d={`M ${x1} ${y1} L ${x2} ${y2} A 9.5 9.5 0 0 1 ${x3} ${y3} L ${x4} ${y4} A 4 4 0 0 0 ${x1} ${y1} Z`}
+                      />
+                    );
+                  })}
+                </g>
+              </svg>
+              <span className="font-sans text-xl font-semibold tracking-tight text-white">
+                litmus
+              </span>
+            </div>
+
+            {/* Quote */}
+            <blockquote className="mt-14 text-lg md:text-[21px] text-white/90 leading-relaxed font-sans font-light tracking-wide">
+              “ToggleNow allows us to make informed and cohesive decisions around{" "}
+              <strong className="font-semibold text-white">securing our SAP systems</strong> and
+              making our compliance seamless.”
+            </blockquote>
+
+            {/* Author */}
+            <div className="flex items-center gap-3.5 mt-14">
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&h=120&q=80"
+                alt="Taylor Davis"
+                className="size-11 rounded-full object-cover border border-white/20 shadow-md"
+                referrerPolicy="no-referrer"
+              />
+              <div>
+                <cite className="not-italic text-sm font-semibold text-white block">
+                  Taylor Davis
+                </cite>
+                <span className="font-mono text-[10px] text-white/75 uppercase tracking-wider block mt-0.5">
+                  Senior Director of Customer Experience
+                </span>
               </div>
             </div>
           </div>
@@ -289,122 +277,6 @@ function LoginPage() {
         </section>
       </div>
     </main>
-  );
-}
-
-function Stat({ kpi, label, onBlue = false }: { kpi: string; label: string; onBlue?: boolean }) {
-  return (
-    <div
-      className={`rounded-2xl border p-4 ${onBlue ? "border-white/10 bg-white/5 backdrop-blur-sm" : "border-border bg-background"}`}
-    >
-      <p
-        className={`font-display text-xl font-semibold ${onBlue ? "text-white" : "text-foreground"}`}
-      >
-        {kpi}
-      </p>
-      <p className={`mt-1 text-xs ${onBlue ? "text-blue-100" : "text-caption"}`}>{label}</p>
-    </div>
-  );
-}
-
-function ShowcaseIllustration() {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % REVIEWS.length);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, []);
-
-  const current = REVIEWS[index];
-
-  return (
-    <div className="relative flex flex-col items-center justify-center flex-1 h-full max-w-xl mx-auto py-12 px-2">
-      {/* Background Radial Glow */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)]" />
-
-      {/* Outer elegant container with perfect balance and visual hierarchy */}
-      <div className="w-full relative min-h-[340px] flex flex-col justify-between rounded-3xl border border-white/10 bg-white/5 p-8 shadow-float backdrop-blur-sm">
-        <div className="absolute top-6 right-6">
-          <Quotes className="size-10 text-white/10" weight="fill" />
-        </div>
-
-        <div className="relative overflow-hidden flex-1 flex flex-col justify-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="flex flex-col gap-6"
-            >
-              {/* Star Rating & Stat Badge */}
-              <div className="flex items-center justify-between">
-                <div className="flex gap-1">
-                  {[...Array(current.rating)].map((_, i) => (
-                    <Star key={i} className="size-4 text-amber-400" weight="fill" />
-                  ))}
-                </div>
-                <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white border border-white/10">
-                  {current.stat}
-                </span>
-              </div>
-
-              {/* Testimonial Quote */}
-              <blockquote className="text-[17px] font-display font-medium leading-relaxed text-white tracking-tight md:text-[19px]">
-                "{current.quote}"
-              </blockquote>
-
-              {/* Author details with elegant visual hierarchy */}
-              <div className="flex items-center gap-3 mt-2 border-t border-white/10 pt-4">
-                <div className="grid size-10 place-items-center rounded-full bg-white/10 text-white font-display font-semibold text-sm">
-                  {current.author
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </div>
-                <div>
-                  <cite className="not-italic text-sm font-semibold text-white block">
-                    {current.author}
-                  </cite>
-                  <span className="text-xs text-blue-100 block">
-                    {current.role} ·{" "}
-                    <strong className="font-medium text-blue-200">{current.company}</strong>
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Carousel indicator dots with progress bars */}
-        <div className="mt-8 flex items-center justify-center gap-2">
-          {REVIEWS.map((_, i) => {
-            const isActive = i === index;
-            return (
-              <button
-                key={i}
-                onClick={() => setIndex(i)}
-                className="relative h-1.5 rounded-full overflow-hidden transition-all duration-300 bg-white/20 focus:outline-none"
-                style={{ width: isActive ? "32px" : "8px" }}
-                aria-label={`Go to slide ${i + 1}`}
-              >
-                {isActive && (
-                  <motion.div
-                    initial={{ left: "-100%" }}
-                    animate={{ left: "0%" }}
-                    transition={{ duration: 5.5, ease: "linear" }}
-                    className="absolute inset-y-0 left-0 bg-white w-full"
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
   );
 }
 
