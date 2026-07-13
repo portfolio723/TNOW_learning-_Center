@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Check, X } from "lucide-react";
 import { SectionHeader, StepNav, VideoBlock } from "@/components/StepNav";
 import { useExperience } from "@/lib/experience-store";
 
@@ -9,18 +7,7 @@ export const Route = createFileRoute("/experience/secops/why")({
   component: WhyPage,
 });
 
-const COMPARE = [
-  { topic: "Provisioning", manual: "3–6 days", secops: "12 minutes" },
-  { topic: "Licenses", manual: "Annual guesswork", secops: "Continuous, usage-based" },
-  { topic: "SoD", manual: "Post-audit findings", secops: "Real-time simulation" },
-  { topic: "Self-Service", manual: "Ticket queue", secops: "Branded catalog" },
-  { topic: "Audit", manual: "Fire drill", secops: "One-click evidence" },
-];
-
-const CHECKLIST = ["Provisioning", "Licenses", "SoD", "Self-Service", "Audit"];
-
 function WhyPage() {
-  const [tab, setTab] = useState<"benefits" | "problems" | "solutions">("benefits");
   const incVideos = useExperience((s) => s.incVideos);
   const addAchievement = useExperience((s) => s.addAchievement);
   const complete = useExperience((s) => s.complete);
@@ -33,91 +20,17 @@ function WhyPage() {
         description="A quick tour of the problems SecOps solves, why the manual approach breaks down, and what changes on day one."
       />
 
-      <div className="mt-4 flex flex-col gap-4 max-w-lg w-full">
-        {/* Top: Compact Video Block */}
-        <div className="w-full">
-          <VideoBlock
-            label="Why SecOps · 2:48"
-            onPlay={() => {
-              incVideos();
-              addAchievement("firstVideo");
-            }}
-            onComplete={() => {
-              complete("why");
-            }}
-          />
-        </div>
-
-        {/* Bottom: Benefits, Problems, Solutions Stack */}
-        <div className="flex flex-col">
-          <div className="self-start inline-flex rounded-full border border-border bg-background p-1">
-            {(["benefits", "problems", "solutions"] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                className={`rounded-full px-3.5 py-1 text-xs font-medium capitalize transition ${
-                  tab === t
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-
-          <div
-            className="mt-3 rounded-2xl border border-border bg-card p-4 min-h-[150px]"
-            style={{ borderRadius: 16 }}
-          >
-            {tab === "benefits" && (
-              <ul className="grid gap-2 sm:grid-cols-2 text-xs">
-                {[
-                  "50% fewer helpdesk tickets",
-                  "Days → minutes provisioning",
-                  "Real-time SoD simulation",
-                  "15–30% SAP license savings",
-                  "Continuous audit readiness",
-                  "Zero footprint inside SAP",
-                ].map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-foreground">
-                    <Check className="mt-0.5 size-3.5 text-primary shrink-0" /> {b}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {tab === "problems" && (
-              <ul className="space-y-1.5 text-xs text-foreground">
-                {[
-                  "Manual provisioning across ECC, S/4, BW, HANA landscapes",
-                  "SoD conflicts discovered only during audits",
-                  "Overspend on SAP Professional licenses",
-                  "Firefighter access approvals stuck in email",
-                  "Access reviews driven by spreadsheets",
-                ].map((p) => (
-                  <li key={p} className="flex items-start gap-2">
-                    <X className="mt-0.5 size-3.5 text-destructive shrink-0" /> {p}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {tab === "solutions" && (
-              <ul className="space-y-1.5 text-xs text-foreground">
-                {[
-                  "HR-driven joiner/mover/leaver automation",
-                  "Simulate SoD on every access change, before commit",
-                  "Reclassify licenses based on actual SAP usage",
-                  "Policy-based firefighter with session recording",
-                  "Campaign-driven access recertification",
-                ].map((s) => (
-                  <li key={s} className="flex items-start gap-2">
-                    <Check className="mt-0.5 size-3.5 text-primary shrink-0" /> {s}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
+      <div className="mt-6 max-w-2xl w-full">
+        <VideoBlock
+          label="Why SecOps · 2:48"
+          onPlay={() => {
+            incVideos();
+            addAchievement("firstVideo");
+          }}
+          onComplete={() => {
+            complete("why");
+          }}
+        />
       </div>
 
       <StepNav current="why" />
