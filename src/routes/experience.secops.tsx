@@ -213,10 +213,7 @@ function SecOpsLayout() {
           </div>
 
           {/* Promo CTA Card */}
-          <div className="mt-4 rounded-2xl bg-[#204CED] text-white p-5 shrink-0 flex flex-col justify-between relative overflow-hidden shadow-[0_12px_30px_rgba(32,76,237,0.25)] border border-[#204CED]/10 group">
-            {/* Subtle light effect */}
-            <div className="absolute -top-12 -right-12 size-32 rounded-full bg-white/10 blur-2xl group-hover:scale-125 transition-transform duration-500" />
-
+          <div className="mt-4 rounded-2xl bg-[#204CED] text-white p-5 shrink-0 flex flex-col justify-between relative overflow-hidden border border-[#204CED]/10 group">
             <div>
               <span className="inline-block rounded-full bg-white/20 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
                 Exclusive Invitation

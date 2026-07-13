@@ -26,19 +26,30 @@ function Welcome() {
         description="Here's your personalized SecOps Experience — a 10–15 minute guided briefing for you."
       />
 
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
+      <div className="mt-10 grid gap-6 md:grid-cols-3">
         {[
-          { kpi: "50%", label: "Reduction in helpdesk tickets" },
-          { kpi: "Days → Minutes", label: "Provisioning turnaround" },
-          { kpi: "100%", label: "Continuously audit ready" },
+          { kpi: "50%", label: "Reduction in helpdesk tickets", watermark: "50%" },
+          { kpi: "Days → Mins", label: "Provisioning turnaround time", watermark: "24h" },
+          { kpi: "100%", label: "Continuously audit ready and compliant", watermark: "100" },
         ].map((k) => (
           <div
             key={k.label}
-            className="rounded-3xl border border-border bg-card p-6"
-            style={{ borderRadius: 20 }}
+            className="relative overflow-hidden rounded-[20px] border border-border bg-card p-8 h-[220px] flex flex-col justify-end group hover:border-[#204CED]/15 hover:shadow-[0_12px_30px_rgba(32,76,237,0.04)] transition-all duration-300"
           >
-            <p className="font-display text-3xl font-semibold text-foreground">{k.kpi}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{k.label}</p>
+            {/* Giant watermark in background */}
+            <div className="absolute right-[-10px] top-[-20px] text-[110px] font-extrabold text-[#204CED]/[0.06] dark:text-[#204CED]/[0.04] select-none pointer-events-none leading-none tracking-tighter">
+              {k.watermark}
+            </div>
+
+            {/* Main KPI and Description grouped closely at the bottom */}
+            <div className="z-10 flex flex-col gap-1.5">
+              <p className="font-display text-[32px] font-medium text-foreground tracking-tight leading-none">
+                {k.kpi}
+              </p>
+              <p className="text-[13px] text-muted-foreground leading-normal font-normal md:max-w-[200px]">
+                {k.label}
+              </p>
+            </div>
           </div>
         ))}
       </div>

@@ -95,14 +95,7 @@ function TourGrid() {
               className="group flex flex-col overflow-hidden rounded-[20px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-[#204CED]/15"
             >
               {/* Top Visual Thumbnail Area */}
-              <div className={`relative w-full aspect-[1.8/1] overflow-hidden ${theme.gradient}`}>
-                {/* Hover Play Overlay */}
-                <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                  <div className="grid size-11 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                    <Play className="ml-0.5 size-4.5 fill-white text-white" />
-                  </div>
-                </div>
-
+              <div className={`relative w-full aspect-[1.9/1] overflow-hidden ${theme.gradient}`}>
                 {/* Top Right: Watch/Complete status button */}
                 <div className="absolute top-3 right-3 z-20">
                   <button
@@ -149,8 +142,8 @@ function TourGrid() {
                   </div>
                 </div>
 
-                {/* Right Arrow/Play Circular Button */}
-                <div className="grid size-9 place-items-center rounded-full bg-[#204CED] text-white transition-all duration-300 group-hover:scale-105 shadow-sm shrink-0 mt-0.5">
+                {/* Right Arrow/Play Circular Button - aligned to bottom */}
+                <div className="grid size-9 place-items-center rounded-full bg-[#204CED] text-white transition-all duration-300 group-hover:scale-105 shadow-sm shrink-0 self-end mb-0.5">
                   <Play className="ml-0.5 size-3.5 fill-white text-white" />
                 </div>
               </div>
