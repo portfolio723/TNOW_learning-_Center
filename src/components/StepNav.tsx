@@ -10,7 +10,7 @@ export function StepNav({ current, nextLabel }: { current: StepId; nextLabel?: s
   const next = STEPS[idx + 1];
 
   return (
-    <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
+    <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
       {prev ? (
         <Link
           to={prev.path}
@@ -45,11 +45,11 @@ export function SectionHeader({
   return (
     <div className="max-w-3xl">
       <p className="text-xs font-medium uppercase tracking-widest text-primary">{eyebrow}</p>
-      <h1 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold leading-tight">
+      <h1 className="mt-1.5 font-display text-xl sm:text-2xl md:text-3xl font-semibold leading-tight">
         {title}
       </h1>
       {description && (
-        <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">{description}</p>
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
       )}
     </div>
   );

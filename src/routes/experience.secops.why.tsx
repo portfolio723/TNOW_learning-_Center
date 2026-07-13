@@ -33,9 +33,9 @@ function WhyPage() {
         description="A quick tour of the problems SecOps solves, why the manual approach breaks down, and what changes on day one."
       />
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-2 items-start">
-        {/* Left: Reduced Video Block */}
-        <div className="w-full max-w-xl mx-auto lg:mx-0">
+      <div className="mt-4 flex flex-col gap-4 max-w-lg w-full">
+        {/* Top: Compact Video Block */}
+        <div className="w-full">
           <VideoBlock
             label="Why SecOps · 2:48"
             onPlay={() => {
@@ -48,14 +48,14 @@ function WhyPage() {
           />
         </div>
 
-        {/* Right: Benefits, Problems, Solutions Stack */}
+        {/* Bottom: Benefits, Problems, Solutions Stack */}
         <div className="flex flex-col">
           <div className="self-start inline-flex rounded-full border border-border bg-background p-1">
             {(["benefits", "problems", "solutions"] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition ${
+                className={`rounded-full px-3.5 py-1 text-xs font-medium capitalize transition ${
                   tab === t
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -67,11 +67,11 @@ function WhyPage() {
           </div>
 
           <div
-            className="mt-4 rounded-3xl border border-border bg-card p-6 min-h-[220px]"
-            style={{ borderRadius: 20 }}
+            className="mt-3 rounded-2xl border border-border bg-card p-4 min-h-[150px]"
+            style={{ borderRadius: 16 }}
           >
             {tab === "benefits" && (
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="grid gap-2 sm:grid-cols-2 text-xs">
                 {[
                   "50% fewer helpdesk tickets",
                   "Days → minutes provisioning",
@@ -80,14 +80,14 @@ function WhyPage() {
                   "Continuous audit readiness",
                   "Zero footprint inside SAP",
                 ].map((b) => (
-                  <li key={b} className="flex items-start gap-2 text-sm text-foreground">
-                    <Check className="mt-0.5 size-4 text-primary shrink-0" /> {b}
+                  <li key={b} className="flex items-start gap-2 text-foreground">
+                    <Check className="mt-0.5 size-3.5 text-primary shrink-0" /> {b}
                   </li>
                 ))}
               </ul>
             )}
             {tab === "problems" && (
-              <ul className="space-y-2 text-sm text-foreground">
+              <ul className="space-y-1.5 text-xs text-foreground">
                 {[
                   "Manual provisioning across ECC, S/4, BW, HANA landscapes",
                   "SoD conflicts discovered only during audits",
@@ -96,13 +96,13 @@ function WhyPage() {
                   "Access reviews driven by spreadsheets",
                 ].map((p) => (
                   <li key={p} className="flex items-start gap-2">
-                    <X className="mt-0.5 size-4 text-destructive shrink-0" /> {p}
+                    <X className="mt-0.5 size-3.5 text-destructive shrink-0" /> {p}
                   </li>
                 ))}
               </ul>
             )}
             {tab === "solutions" && (
-              <ul className="space-y-2 text-sm text-foreground">
+              <ul className="space-y-1.5 text-xs text-foreground">
                 {[
                   "HR-driven joiner/mover/leaver automation",
                   "Simulate SoD on every access change, before commit",
@@ -111,7 +111,7 @@ function WhyPage() {
                   "Campaign-driven access recertification",
                 ].map((s) => (
                   <li key={s} className="flex items-start gap-2">
-                    <Check className="mt-0.5 size-4 text-primary shrink-0" /> {s}
+                    <Check className="mt-0.5 size-3.5 text-primary shrink-0" /> {s}
                   </li>
                 ))}
               </ul>

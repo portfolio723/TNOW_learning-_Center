@@ -36,8 +36,6 @@ function AiPage() {
     complete("ai");
   }
 
-  const topics = Array.from(new Set(AI_SUGGESTIONS.map((s) => s.topic)));
-
   return (
     <div>
       <SectionHeader
@@ -46,22 +44,22 @@ function AiPage() {
         description="Get instant, accurate answers about SAP compatibility, architecture, licensing, and rollout — with references you can hand to your team."
       />
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="mt-4 grid gap-4 lg:grid-cols-[240px_1fr] items-start">
         {/* Left column */}
-        <aside className="space-y-4 order-2 lg:order-1">
+        <aside className="order-2 lg:order-1 w-full h-[360px]">
           <div
-            className="rounded-3xl border border-border bg-card p-5"
-            style={{ borderRadius: 20 }}
+            className="rounded-2xl border border-border bg-card p-4 h-full flex flex-col"
+            style={{ borderRadius: 16 }}
           >
-            <p className="text-xs font-medium uppercase tracking-widest text-caption">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-caption shrink-0">
               Suggested questions
             </p>
-            <ul className="mt-3 space-y-1.5">
+            <ul className="mt-2 space-y-1 overflow-y-auto flex-1 pr-1">
               {AI_SUGGESTIONS.map((s) => (
                 <li key={s.q}>
                   <button
                     onClick={() => send(s.q)}
-                    className="w-full rounded-xl px-3 py-2 text-left text-sm text-foreground transition hover:bg-surface-alt hover:text-primary"
+                    className="w-full rounded-lg px-2.5 py-1.5 text-left text-xs text-foreground transition hover:bg-surface-alt hover:text-primary leading-tight"
                   >
                     {s.q}
                   </button>
@@ -69,44 +67,26 @@ function AiPage() {
               ))}
             </ul>
           </div>
-          <div
-            className="rounded-3xl border border-border bg-card p-5"
-            style={{ borderRadius: 20 }}
-          >
-            <p className="text-xs font-medium uppercase tracking-widest text-primary">
-              Popular topics
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {topics.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
         </aside>
 
         {/* Chat */}
         <section
-          className="flex min-h-[520px] flex-col overflow-hidden rounded-3xl border border-border bg-background order-1 lg:order-2"
-          style={{ borderRadius: 20 }}
+          className="flex h-[360px] flex-col overflow-hidden rounded-2xl border border-border bg-background order-1 lg:order-2"
+          style={{ borderRadius: 16 }}
         >
-          <div className="flex items-center gap-2 border-b border-border px-5 py-3">
-            <Sparkles className="size-4 text-primary" />
-            <p className="font-display text-sm font-semibold">SecOps Expert</p>
-            <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+          <div className="flex items-center gap-2 border-b border-border px-4 py-2">
+            <Sparkles className="size-3.5 text-primary" />
+            <p className="font-display text-xs font-semibold">SecOps Expert</p>
+            <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">
               online
             </span>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-5 py-5">
+          <div className="flex-1 space-y-2.5 overflow-y-auto px-4 py-4">
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                className={`max-w-[85%] rounded-xl px-3.5 py-2 text-xs leading-relaxed ${
                   m.role === "user"
                     ? "ml-auto bg-primary text-primary-foreground"
                     : "bg-surface text-foreground"
@@ -114,12 +94,12 @@ function AiPage() {
               >
                 {m.text}
                 {m.role === "ai" && i > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <button className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground hover:text-primary">
-                      <PlayCircle className="size-3" /> Related video
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <button className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] text-muted-foreground hover:text-primary">
+                      <PlayCircle className="size-2.5" /> Related video
                     </button>
-                    <button className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground hover:text-primary">
-                      <BookOpen className="size-3" /> Documentation
+                    <button className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] text-muted-foreground hover:text-primary">
+                      <BookOpen className="size-2.5" /> Documentation
                     </button>
                   </div>
                 )}
@@ -132,21 +112,21 @@ function AiPage() {
               e.preventDefault();
               send(input);
             }}
-            className="flex items-center gap-2 border-t border-border px-5 py-4"
+            className="flex items-center gap-2 border-t border-border px-4 py-2.5"
           >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about compatibility, architecture, licensing…"
-              className="flex-1 rounded-2xl border border-border bg-background px-4 py-2.5 text-sm outline-none placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
-              style={{ borderRadius: 16 }}
+              className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2 text-xs outline-none placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+              style={{ borderRadius: 12 }}
             />
             <button
               type="submit"
-              className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground hover:bg-primary-hover"
+              className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground hover:bg-primary-hover shrink-0"
               aria-label="Send"
             >
-              <Send className="size-4" />
+              <Send className="size-3.5" />
             </button>
           </form>
         </section>
