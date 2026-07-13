@@ -83,7 +83,7 @@ function TourGrid() {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3 grid-cols-2 lg:grid-cols-3">
+      <div className="mt-4 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {CAPABILITIES.map((c, idx) => {
           const done = viewed.includes(c.id);
           const theme = CARD_THEMES[idx % CARD_THEMES.length];
@@ -92,55 +92,66 @@ function TourGrid() {
               key={c.id}
               to="/experience/secops/tour/$capability"
               params={{ capability: c.id }}
-              className={`group relative overflow-hidden rounded-2xl border border-white/10 ${theme.gradient} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${theme.shadow} aspect-[4/3.2] flex flex-col justify-between p-4 text-white`}
-              style={{ borderRadius: 16 }}
+              className="group flex flex-col overflow-hidden rounded-[20px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-[#204CED]/15"
             >
-              {/* Hover Play Overlay */}
-              <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                <div className="grid size-11 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                  <Play className="ml-0.5 size-4.5 fill-white text-white" />
+              {/* Top Visual Thumbnail Area */}
+              <div className={`relative w-full aspect-[1.8/1] overflow-hidden ${theme.gradient}`}>
+                {/* Hover Play Overlay */}
+                <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                  <div className="grid size-11 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                    <Play className="ml-0.5 size-4.5 fill-white text-white" />
+                  </div>
+                </div>
+
+                {/* Top Right: Watch/Complete status button */}
+                <div className="absolute top-3 right-3 z-20">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      markCapability(c.id);
+                    }}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-md border transition-all duration-300 ${
+                      done
+                        ? "bg-emerald-500/95 border-emerald-400 text-white shadow-sm"
+                        : "bg-black/35 hover:bg-black/50 border-white/20 text-white"
+                    }`}
+                  >
+                    {done ? (
+                      <>
+                        <Check className="size-3 stroke-[3px]" /> Completed
+                      </>
+                    ) : (
+                      <>Mark Complete</>
+                    )}
+                  </button>
                 </div>
               </div>
 
-              {/* Top Row: Complete status button */}
-              <div className="flex justify-end w-full z-20">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    markCapability(c.id);
-                  }}
-                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold backdrop-blur-md border transition-all duration-300 ${
-                    done
-                      ? "bg-emerald-500/95 border-emerald-400 text-white shadow-sm"
-                      : "bg-white/10 hover:bg-white/20 border-white/20 text-white"
-                  }`}
-                >
-                  {done ? (
-                    <>
-                      <Check className="size-3 stroke-[3px]" /> Done
-                    </>
-                  ) : (
-                    <>Watch</>
-                  )}
-                </button>
-              </div>
-
-              {/* Bottom Area: Title, Description & Duration */}
-              <div className="mt-auto flex items-end justify-between gap-4 w-full z-20">
+              {/* Bottom Metadata Content Area */}
+              <div className="flex p-5 gap-3 justify-between items-start flex-1 bg-white dark:bg-card">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-display text-lg sm:text-xl font-normal tracking-tight text-white leading-tight">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#204CED]/90 block mb-1.5">
+                    SAP Security
+                  </span>
+                  <h3 className="font-display text-[15px] sm:text-[16px] font-medium tracking-tight text-foreground leading-snug group-hover:text-primary transition-colors">
                     {c.title}
                   </h3>
-                  <p className="mt-1 text-[11px] sm:text-xs text-white/80 line-clamp-2 leading-relaxed font-light">
-                    {c.summary}
-                  </p>
+
+                  {/* Metadata Row */}
+                  <div className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground/90 font-normal">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="size-3 text-muted-foreground" />
+                      <span>{c.duration} mins</span>
+                    </span>
+                    <span className="size-1 rounded-full bg-border" />
+                    <span>Video Tour</span>
+                  </div>
                 </div>
 
-                <div className="shrink-0 text-right">
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/25 backdrop-blur-sm px-2 py-1 text-[10px] sm:text-[11px] font-medium text-white border border-white/10">
-                    <Clock className="size-3 text-white/90" /> {c.duration}
-                  </span>
+                {/* Right Arrow/Play Circular Button */}
+                <div className="grid size-9 place-items-center rounded-full bg-[#204CED] text-white transition-all duration-300 group-hover:scale-105 shadow-sm shrink-0 mt-0.5">
+                  <Play className="ml-0.5 size-3.5 fill-white text-white" />
                 </div>
               </div>
             </Link>

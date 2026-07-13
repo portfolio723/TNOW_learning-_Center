@@ -59,10 +59,12 @@ export function VideoBlock({
   label = "Product demo",
   onPlay,
   onComplete,
+  className = "aspect-video",
 }: {
   label?: string;
   onPlay?: () => void;
   onComplete?: () => void;
+  className?: string;
 }) {
   const [status, setStatus] = useState<"idle" | "playing" | "completed">("idle");
   const [progress, setProgress] = useState(0);
@@ -116,7 +118,9 @@ export function VideoBlock({
   };
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-3xl border border-border bg-foreground select-none">
+    <div
+      className={`relative overflow-hidden rounded-3xl border border-border bg-foreground select-none ${className}`}
+    >
       {/* Background gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(32,76,237,0.2),transparent_60%)]" />
 

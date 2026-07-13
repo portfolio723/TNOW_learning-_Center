@@ -25,6 +25,11 @@ function SecOpsLayout() {
   const { pct, done, total } = useProgress(pathname);
   const user = useExperience((s) => s.user);
   const completed = useExperience((s) => s.completed);
+  const achievements = useExperience((s) => s.achievements);
+  const capabilitiesViewed = useExperience((s) => s.capabilitiesViewed);
+  const storiesRead = useExperience((s) => s.storiesRead);
+  const aiQuestionsAsked = useExperience((s) => s.aiQuestionsAsked);
+  const videosWatched = useExperience((s) => s.videosWatched);
   const matches = useMatches();
   const [aiOpen, setAiOpen] = useState(false);
 
@@ -157,7 +162,7 @@ function SecOpsLayout() {
 
       <div className="mx-auto flex max-w-[1400px] gap-8 px-4 sm:px-6 py-6 md:py-8">
         {/* Sidebar */}
-        <aside className="sticky top-[73px] hidden h-[calc(100dvh-100px)] w-64 shrink-0 flex-col lg:flex">
+        <aside className="sticky top-[73px] hidden h-[calc(100dvh-100px)] w-64 shrink-0 flex-col lg:flex overflow-y-auto scrollbar-none pr-1">
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium uppercase tracking-widest text-caption">
@@ -205,6 +210,34 @@ function SecOpsLayout() {
                 );
               })}
             </nav>
+          </div>
+
+          {/* Promo CTA Card */}
+          <div className="mt-4 rounded-2xl bg-[#204CED] text-white p-5 shrink-0 flex flex-col justify-between relative overflow-hidden shadow-[0_12px_30px_rgba(32,76,237,0.25)] border border-[#204CED]/10 group">
+            {/* Subtle light effect */}
+            <div className="absolute -top-12 -right-12 size-32 rounded-full bg-white/10 blur-2xl group-hover:scale-125 transition-transform duration-500" />
+
+            <div>
+              <span className="inline-block rounded-full bg-white/20 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                Exclusive Invitation
+              </span>
+              <h3 className="mt-3 font-display text-[16px] font-semibold leading-tight text-white">
+                Book an Interactive SAP Security Workshop
+              </h3>
+              <p className="mt-2 text-[11px] text-white/80 leading-normal font-normal">
+                Connect with our top-tier SecOps specialists to analyze your system and review
+                segregation-of-duties risks live.
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <Link
+                to="/experience/secops/book"
+                className="w-full py-2.5 rounded-xl bg-white hover:bg-white/95 text-[#204CED] font-semibold text-xs transition duration-200 text-center block shadow-sm active:scale-98 font-sans"
+              >
+                Schedule Free Scan
+              </Link>
+            </div>
           </div>
         </aside>
 
