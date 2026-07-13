@@ -95,11 +95,15 @@ function TourGrid() {
               className={`group relative overflow-hidden rounded-2xl border border-white/10 ${theme.gradient} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${theme.shadow} aspect-[4/3.2] flex flex-col justify-between p-4 text-white`}
               style={{ borderRadius: 16 }}
             >
+              {/* Hover Play Overlay */}
+              <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                <div className="grid size-11 place-items-center rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                  <Play className="ml-0.5 size-4.5 fill-white text-white" />
+                </div>
+              </div>
+
               {/* Top Row: Complete status button */}
-              <div className="flex items-center justify-between w-full">
-                <span className="text-[9px] font-medium tracking-wider text-white/70 uppercase">
-                  SAP SecOps
-                </span>
+              <div className="flex justify-end w-full z-20">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -122,29 +126,21 @@ function TourGrid() {
                 </button>
               </div>
 
-              {/* Middle Row: Big Bold Title & Small Subtitle */}
-              <div className="mt-2 flex-1 flex flex-col justify-center">
-                <h3 className="font-display text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
-                  {c.title}
-                </h3>
-                <p className="mt-1 text-[10px] sm:text-xs text-white/85 line-clamp-2 leading-snug font-normal">
-                  {c.summary}
-                </p>
-              </div>
-
-              {/* Bottom Row: Video/Duration & Playback trigger button */}
-              <div className="flex items-end justify-between w-full mt-auto pt-2">
-                <div>
-                  <p className="text-[9px] uppercase tracking-wider text-white/60 font-semibold leading-none">
-                    Video Demo
-                  </p>
-                  <p className="text-xs font-bold text-white mt-1 flex items-center gap-1">
-                    <Clock className="size-3 text-white/80" /> {c.duration}
+              {/* Bottom Area: Title, Description & Duration */}
+              <div className="mt-auto flex items-end justify-between gap-4 w-full z-20">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-display text-lg sm:text-xl font-normal tracking-tight text-white leading-tight">
+                    {c.title}
+                  </h3>
+                  <p className="mt-1 text-[11px] sm:text-xs text-white/80 line-clamp-2 leading-relaxed font-light">
+                    {c.summary}
                   </p>
                 </div>
 
-                <div className="grid size-8 sm:size-9 place-items-center rounded-xl bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-lg transition-transform duration-300 group-hover:scale-105 active:scale-95">
-                  <Play className="ml-0.5 size-3.5 fill-white text-white" />
+                <div className="shrink-0 text-right">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/25 backdrop-blur-sm px-2 py-1 text-[10px] sm:text-[11px] font-medium text-white border border-white/10">
+                    <Clock className="size-3 text-white/90" /> {c.duration}
+                  </span>
                 </div>
               </div>
             </Link>
