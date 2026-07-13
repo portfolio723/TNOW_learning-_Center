@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MagnifyingGlass,
   ArrowRight,
+  ArrowLeft,
   Clock,
   Lightning,
   SignOut,
@@ -145,6 +146,9 @@ function ProductSelection() {
   const [teaserRequested, setTeaserRequested] = useState<Record<string, boolean>>({});
   const [requestLoading, setRequestLoading] = useState(false);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCards, setVisibleCards] = useState(3);
+
   const user = useExperience((s) => s.user);
   const reset = useExperience((s) => s.reset);
 
@@ -179,6 +183,33 @@ function ProductSelection() {
     return matchesQuery;
   });
 
+  useEffect(() => {
+    const updateVisible = () => {
+      if (window.innerWidth >= 1024) setVisibleCards(3);
+      else if (window.innerWidth >= 768) setVisibleCards(2);
+      else setVisibleCards(1);
+    };
+    updateVisible();
+    window.addEventListener("resize", updateVisible);
+    return () => window.removeEventListener("resize", updateVisible);
+  }, []);
+
+  const maxIndex = Math.max(0, filtered.length - visibleCards);
+
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [maxIndex, currentIndex]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
   return (
     <main className="min-h-dvh bg-background text-foreground">
       <header className="border-b border-border bg-background">
@@ -196,7 +227,7 @@ function ProductSelection() {
         <p className="text-xs font-medium uppercase tracking-widest text-caption">
           Step 1 of 2 · Choose your product
         </p>
-        <h1 className="mt-3 font-display text-4xl font-semibold leading-tight md:text-5xl">
+        <h1 className="mt-3 font-display text-4xl font-normal leading-tight md:text-5xl">
           Choose your experience
         </h1>
         <p className="mt-3 max-w-2xl text-[15px] text-muted-foreground">
@@ -232,14 +263,47 @@ function ProductSelection() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              onClick={() => handleCardClick(p.id, p.status === "available")}
-            />
-          ))}
+        {/* Carousel Layout */}
+        <div className="relative mt-12 overflow-hidden py-4 px-1">
+          <div className="overflow-hidden -mx-3">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
+              }}
+            >
+              {filtered.map((p) => (
+                <div key={p.id} className="w-full md:w-1/2 lg:w-1/3 shrink-0 px-3">
+                  <ProductCard
+                    product={p}
+                    onClick={() => handleCardClick(p.id, p.status === "available")}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Carousel Navigation - Right Down side */}
+          {filtered.length > visibleCards && (
+            <div className="flex justify-end gap-3 mt-8">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="flex size-12 items-center justify-center rounded-full border border-border bg-background text-foreground transition-all hover:bg-muted active:scale-95 disabled:pointer-events-none disabled:opacity-30 cursor-pointer shadow-sm"
+                aria-label="Previous slide"
+              >
+                <ArrowLeft className="size-5" />
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={currentIndex >= maxIndex}
+                className="flex size-12 items-center justify-center rounded-full border border-border bg-background text-foreground transition-all hover:bg-muted active:scale-95 disabled:pointer-events-none disabled:opacity-30 cursor-pointer shadow-sm"
+                aria-label="Next slide"
+              >
+                <ArrowRight className="size-5" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -436,6 +500,107 @@ function getProductIcon(id: string) {
   }
 }
 
+const CARD_THEMES: Record<
+  string,
+  {
+    bg: string;
+    border: string;
+    dotColor: string;
+    badgeText: string;
+    accentSvg: React.ReactNode;
+  }
+> = {
+  secops: {
+    bg: "bg-[#FFF2EA]",
+    border: "border-orange-100",
+    dotColor: "bg-[#FF5A1F]",
+    badgeText: "Available",
+    accentSvg: (
+      <svg
+        className="absolute right-0 bottom-0 top-0 h-full w-[45%] text-orange-500/10 pointer-events-none"
+        viewBox="0 0 150 300"
+        fill="currentColor"
+      >
+        <rect x="35" y="40" width="85" height="42" rx="21" transform="rotate(-30 35 40)" />
+        <rect x="70" y="115" width="85" height="42" rx="21" transform="rotate(-30 70 115)" />
+        <rect x="30" y="190" width="85" height="42" rx="21" transform="rotate(-30 30 190)" />
+        <rect x="80" y="240" width="85" height="42" rx="21" transform="rotate(-30 80 240)" />
+      </svg>
+    ),
+  },
+  fftrust: {
+    bg: "bg-[#F5F5F3]",
+    border: "border-gray-200/80",
+    dotColor: "bg-zinc-800",
+    badgeText: "Coming Soon",
+    accentSvg: (
+      <svg
+        className="absolute right-0 bottom-0 top-0 h-full w-[45%] text-gray-400/10 pointer-events-none"
+        viewBox="0 0 150 300"
+        fill="currentColor"
+      >
+        <circle cx="85" cy="80" r="35" />
+        <path d="M 50 170 A 35 35 0 0 1 120 170 Z" />
+        <circle cx="85" cy="240" r="35" />
+      </svg>
+    ),
+  },
+  reviewnow: {
+    bg: "bg-[#F2EFFB]",
+    border: "border-purple-100",
+    dotColor: "bg-[#7C5EE3]",
+    badgeText: "Coming Soon",
+    accentSvg: (
+      <svg
+        className="absolute right-0 bottom-0 top-0 h-full w-[45%] text-[#7C5EE3]/10 pointer-events-none"
+        viewBox="0 0 150 300"
+        fill="currentColor"
+      >
+        <circle cx="100" cy="150" r="60" stroke="currentColor" strokeWidth="12" fill="none" />
+        <circle cx="100" cy="150" r="35" stroke="currentColor" strokeWidth="10" fill="none" />
+        <circle cx="100" cy="150" r="12" />
+      </svg>
+    ),
+  },
+  gams360: {
+    bg: "bg-[#ECF6EE]",
+    border: "border-emerald-100",
+    dotColor: "bg-[#107C41]",
+    badgeText: "Coming Soon",
+    accentSvg: (
+      <svg
+        className="absolute right-0 bottom-0 top-0 h-full w-[45%] text-emerald-500/10 pointer-events-none"
+        viewBox="0 0 150 300"
+        fill="currentColor"
+      >
+        <rect x="40" y="40" width="55" height="55" rx="14" />
+        <rect x="105" y="105" width="55" height="55" rx="14" />
+        <rect x="40" y="170" width="55" height="55" rx="14" />
+      </svg>
+    ),
+  },
+  digybots: {
+    bg: "bg-[#EDF6FA]",
+    border: "border-sky-100",
+    dotColor: "bg-[#0078D4]",
+    badgeText: "Coming Soon",
+    accentSvg: (
+      <svg
+        className="absolute right-0 bottom-0 top-0 h-full w-[45%] text-sky-500/10 pointer-events-none"
+        viewBox="0 0 150 300"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="12"
+        strokeLinecap="round"
+      >
+        <path d="M20,60 C60,20 100,100 140,60" />
+        <path d="M20,130 C60,90 100,170 140,130" />
+        <path d="M20,200 C60,160 100,240 140,200" />
+      </svg>
+    ),
+  },
+};
+
 function ProductCard({
   product,
   onClick,
@@ -444,54 +609,37 @@ function ProductCard({
   onClick: () => void;
 }) {
   const available = product.status === "available";
+  const theme = CARD_THEMES[product.id] || CARD_THEMES.secops;
+
   const body = (
     <article
-      className={`group relative flex h-full flex-col rounded-3xl border bg-card p-6 transition-all duration-200 ${
-        available
-          ? "border-border hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elevate cursor-pointer"
-          : "border-border hover:border-primary/25 bg-card/90 cursor-pointer"
-      }`}
-      style={{ borderRadius: 20 }}
+      className={`group relative flex h-[350px] flex-col rounded-[24px] border ${theme.bg} ${theme.border} p-8 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none`}
     >
-      <div className="flex items-start justify-between">
-        <div className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
-          {getProductIcon(product.id)}
+      {/* Decorative Accent Graphic */}
+      {theme.accentSvg}
+
+      {/* Top Badge */}
+      <div className="z-10 self-start">
+        <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-normal text-[#111111] shadow-sm border border-black/[0.04]">
+          <span className={`size-2 rounded-full ${theme.dotColor}`} />
+          {theme.badgeText}
         </div>
-        <span
-          className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${
-            available ? "bg-primary/10 text-primary" : "bg-foreground/5 text-caption"
-          }`}
-        >
-          {available ? "Available" : "Coming soon"}
-        </span>
       </div>
 
-      <h3 className="mt-6 font-display text-2xl font-semibold text-foreground">{product.name}</h3>
-      <p className="mt-1 text-sm font-medium text-foreground/80">{product.tagline}</p>
-      <p className="mt-3 text-sm text-muted-foreground">{product.description}</p>
+      {/* Content */}
+      <div className="z-10 mt-8 flex-1 flex flex-col justify-center">
+        <h3 className="font-sans text-[26px] font-normal text-[#111111] leading-none tracking-tight">
+          {product.name}
+        </h3>
+        <p className="mt-4 text-sm text-[#555555] leading-relaxed max-w-[85%] font-normal">
+          {product.description}
+        </p>
+      </div>
 
-      <ul className="mt-5 flex flex-wrap gap-1.5">
-        {product.capabilities.map((c) => (
-          <li
-            key={c}
-            className="rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground"
-          >
-            {c}
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
-        <span className="inline-flex items-center gap-1.5 text-xs text-caption">
-          <Clock className="size-3.5" /> {product.time}
-        </span>
-        <span
-          className={`inline-flex items-center gap-1.5 text-sm font-medium ${
-            available ? "text-primary" : "text-caption group-hover:text-primary transition-colors"
-          }`}
-        >
-          {product.cta}
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+      {/* CTA bottom left */}
+      <div className="z-10 mt-auto pt-4">
+        <span className="inline-block border-b border-current pb-0.5 font-bold text-xs tracking-wide text-foreground hover:opacity-85 transition-opacity">
+          {product.cta} →
         </span>
       </div>
     </article>

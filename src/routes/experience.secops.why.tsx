@@ -33,113 +33,90 @@ function WhyPage() {
         description="A quick tour of the problems SecOps solves, why the manual approach breaks down, and what changes on day one."
       />
 
-      <div className="mt-10">
-        <VideoBlock
-          label="Why SecOps · 2:48"
-          onPlay={() => {
-            incVideos();
-            addAchievement("firstVideo");
-          }}
-          onComplete={() => {
-            complete("why");
-          }}
-        />
-      </div>
-
-      <div className="mt-10">
-        <div className="inline-flex rounded-full border border-border bg-background p-1">
-          {(["benefits", "problems", "solutions"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition ${
-                tab === t
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+      <div className="mt-8 grid gap-8 lg:grid-cols-2 items-start">
+        {/* Left: Reduced Video Block */}
+        <div className="w-full max-w-xl mx-auto lg:mx-0">
+          <VideoBlock
+            label="Why SecOps · 2:48"
+            onPlay={() => {
+              incVideos();
+              addAchievement("firstVideo");
+            }}
+            onComplete={() => {
+              complete("why");
+            }}
+          />
         </div>
 
-        <div
-          className="mt-6 rounded-3xl border border-border bg-card p-6"
-          style={{ borderRadius: 20 }}
-        >
-          {tab === "benefits" && (
-            <ul className="grid gap-3 md:grid-cols-2">
-              {[
-                "50% fewer helpdesk tickets",
-                "Days → minutes provisioning",
-                "Real-time SoD simulation",
-                "15–30% SAP license savings",
-                "Continuous audit readiness",
-                "Zero footprint inside SAP",
-              ].map((b) => (
-                <li key={b} className="flex items-start gap-2 text-sm text-foreground">
-                  <Check className="mt-0.5 size-4 text-primary" /> {b}
-                </li>
-              ))}
-            </ul>
-          )}
-          {tab === "problems" && (
-            <ul className="space-y-2 text-sm text-foreground">
-              {[
-                "Manual provisioning across ECC, S/4, BW, HANA landscapes",
-                "SoD conflicts discovered only during audits",
-                "Overspend on SAP Professional licenses",
-                "Firefighter access approvals stuck in email",
-                "Access reviews driven by spreadsheets",
-              ].map((p) => (
-                <li key={p} className="flex items-start gap-2">
-                  <X className="mt-0.5 size-4 text-destructive" /> {p}
-                </li>
-              ))}
-            </ul>
-          )}
-          {tab === "solutions" && (
-            <ul className="space-y-2 text-sm text-foreground">
-              {[
-                "HR-driven joiner/mover/leaver automation",
-                "Simulate SoD on every access change, before commit",
-                "Reclassify licenses based on actual SAP usage",
-                "Policy-based firefighter with session recording",
-                "Campaign-driven access recertification",
-              ].map((s) => (
-                <li key={s} className="flex items-start gap-2">
-                  <Check className="mt-0.5 size-4 text-primary" /> {s}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+        {/* Right: Benefits, Problems, Solutions Stack */}
+        <div className="flex flex-col">
+          <div className="self-start inline-flex rounded-full border border-border bg-background p-1">
+            {(["benefits", "problems", "solutions"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition ${
+                  tab === t
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
 
-      <div className="mt-12">
-        <h2 className="font-display text-xl font-semibold">Manual vs SecOps</h2>
-        <div
-          className="mt-4 overflow-x-auto rounded-3xl border border-border"
-          style={{ borderRadius: 20 }}
-        >
-          <table className="w-full text-sm min-w-[600px]">
-            <thead className="bg-surface">
-              <tr>
-                <th className="px-6 py-3 text-left font-medium text-caption">Area</th>
-                <th className="px-6 py-3 text-left font-medium text-caption">Manual</th>
-                <th className="px-6 py-3 text-left font-medium text-primary">SecOps</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARE.map((row, i) => (
-                <tr key={row.topic} className={i % 2 ? "bg-surface/40" : ""}>
-                  <td className="px-6 py-4 font-medium text-foreground">{row.topic}</td>
-                  <td className="px-6 py-4 text-muted-foreground">{row.manual}</td>
-                  <td className="px-6 py-4 text-foreground">{row.secops}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div
+            className="mt-4 rounded-3xl border border-border bg-card p-6 min-h-[220px]"
+            style={{ borderRadius: 20 }}
+          >
+            {tab === "benefits" && (
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {[
+                  "50% fewer helpdesk tickets",
+                  "Days → minutes provisioning",
+                  "Real-time SoD simulation",
+                  "15–30% SAP license savings",
+                  "Continuous audit readiness",
+                  "Zero footprint inside SAP",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm text-foreground">
+                    <Check className="mt-0.5 size-4 text-primary shrink-0" /> {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {tab === "problems" && (
+              <ul className="space-y-2 text-sm text-foreground">
+                {[
+                  "Manual provisioning across ECC, S/4, BW, HANA landscapes",
+                  "SoD conflicts discovered only during audits",
+                  "Overspend on SAP Professional licenses",
+                  "Firefighter access approvals stuck in email",
+                  "Access reviews driven by spreadsheets",
+                ].map((p) => (
+                  <li key={p} className="flex items-start gap-2">
+                    <X className="mt-0.5 size-4 text-destructive shrink-0" /> {p}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {tab === "solutions" && (
+              <ul className="space-y-2 text-sm text-foreground">
+                {[
+                  "HR-driven joiner/mover/leaver automation",
+                  "Simulate SoD on every access change, before commit",
+                  "Reclassify licenses based on actual SAP usage",
+                  "Policy-based firefighter with session recording",
+                  "Campaign-driven access recertification",
+                ].map((s) => (
+                  <li key={s} className="flex items-start gap-2">
+                    <Check className="mt-0.5 size-4 text-primary shrink-0" /> {s}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
 
