@@ -9,6 +9,33 @@ export const Route = createFileRoute("/experience/secops/tour")({
   component: TourGrid,
 });
 
+const CARD_THEMES = [
+  {
+    gradient: "bg-gradient-to-br from-[#df5c5c] via-[#cc3c8c] to-[#7c2ebd] bg-[#cc3c8c]",
+    shadow: "shadow-[#cc3c8c]/15",
+  },
+  {
+    gradient: "bg-gradient-to-br from-[#1070e6] via-[#4d2dbd] to-[#120f3a] bg-[#4d2dbd]",
+    shadow: "shadow-[#4d2dbd]/15",
+  },
+  {
+    gradient: "bg-gradient-to-br from-[#38bdf8] via-[#0369a1] to-[#0c4a6e] bg-[#0369a1]",
+    shadow: "shadow-[#0369a1]/15",
+  },
+  {
+    gradient: "bg-gradient-to-br from-[#10b981] via-[#0f766e] to-[#115e59] bg-[#0f766e]",
+    shadow: "shadow-[#0f766e]/15",
+  },
+  {
+    gradient: "bg-gradient-to-br from-[#ec4899] via-[#8b5cf6] to-[#3b82f6] bg-[#8b5cf6]",
+    shadow: "shadow-[#8b5cf6]/15",
+  },
+  {
+    gradient: "bg-gradient-to-br from-[#f59e0b] via-[#ea580c] to-[#991b1b] bg-[#ea580c]",
+    shadow: "shadow-[#ea580c]/15",
+  },
+];
+
 function TourGrid() {
   const viewed = useExperience((s) => s.capabilitiesViewed);
   const markCapability = useExperience((s) => s.markCapability);
@@ -57,57 +84,68 @@ function TourGrid() {
       </div>
 
       <div className="mt-4 grid gap-3 grid-cols-2 lg:grid-cols-3">
-        {CAPABILITIES.map((c) => {
+        {CAPABILITIES.map((c, idx) => {
           const done = viewed.includes(c.id);
+          const theme = CARD_THEMES[idx % CARD_THEMES.length];
           return (
             <Link
               key={c.id}
               to="/experience/secops/tour/$capability"
               params={{ capability: c.id }}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elevate flex flex-col"
-              style={{ borderRadius: 14 }}
+              className={`group relative overflow-hidden rounded-2xl border border-white/10 ${theme.gradient} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${theme.shadow} aspect-[4/3.2] flex flex-col justify-between p-4 text-white`}
+              style={{ borderRadius: 16 }}
             >
-              <div className="relative aspect-[2.1/1] bg-foreground w-full">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(32,76,237,0.35),transparent_60%)]" />
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="grid size-9 place-items-center rounded-full bg-primary/90 text-primary-foreground shadow-float transition group-hover:scale-105">
-                    <Play className="ml-0.5 size-3.5 fill-current" />
-                  </div>
-                </div>
-
-                {/* Check/Tick Icon Button */}
+              {/* Top Row: Complete status button */}
+              <div className="flex items-center justify-between w-full">
+                <span className="text-[9px] font-medium tracking-wider text-white/70 uppercase">
+                  SAP SecOps
+                </span>
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     markCapability(c.id);
                   }}
-                  className={`absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold transition-all duration-300 ${
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold backdrop-blur-md border transition-all duration-300 ${
                     done
-                      ? "bg-emerald-500 text-white shadow-sm scale-100"
-                      : "bg-black/40 hover:bg-black/60 border border-white/20 text-white/90 hover:scale-105 active:scale-95"
+                      ? "bg-emerald-500/95 border-emerald-400 text-white shadow-sm"
+                      : "bg-white/10 hover:bg-white/20 border-white/20 text-white"
                   }`}
                 >
                   {done ? (
                     <>
-                      <Check className="size-3 stroke-[3px]" /> Complete
+                      <Check className="size-3 stroke-[3px]" /> Done
                     </>
                   ) : (
-                    <>
-                      <span className="size-1 rounded-full bg-white/60 animate-pulse" /> Watch
-                    </>
+                    <>Watch</>
                   )}
                 </button>
-
-                <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 text-[10px] text-foreground">
-                  <Clock className="size-3" /> {c.duration}
-                </span>
               </div>
-              <div className="p-3 flex-1 flex flex-col justify-center">
-                <p className="font-display text-sm font-semibold text-foreground leading-tight">
+
+              {/* Middle Row: Big Bold Title & Small Subtitle */}
+              <div className="mt-2 flex-1 flex flex-col justify-center">
+                <h3 className="font-display text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
                   {c.title}
+                </h3>
+                <p className="mt-1 text-[10px] sm:text-xs text-white/85 line-clamp-2 leading-snug font-normal">
+                  {c.summary}
                 </p>
-                <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{c.summary}</p>
+              </div>
+
+              {/* Bottom Row: Video/Duration & Playback trigger button */}
+              <div className="flex items-end justify-between w-full mt-auto pt-2">
+                <div>
+                  <p className="text-[9px] uppercase tracking-wider text-white/60 font-semibold leading-none">
+                    Video Demo
+                  </p>
+                  <p className="text-xs font-bold text-white mt-1 flex items-center gap-1">
+                    <Clock className="size-3 text-white/80" /> {c.duration}
+                  </p>
+                </div>
+
+                <div className="grid size-8 sm:size-9 place-items-center rounded-xl bg-white/15 backdrop-blur-md border border-white/20 text-white shadow-lg transition-transform duration-300 group-hover:scale-105 active:scale-95">
+                  <Play className="ml-0.5 size-3.5 fill-white text-white" />
+                </div>
               </div>
             </Link>
           );
