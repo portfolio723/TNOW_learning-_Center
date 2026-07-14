@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TimerReset, ShieldCheck, IdCard, Workflow } from "lucide-react";
-import { SectionHeader, StepNav, VideoBlock } from "@/components/StepNav";
+import { Timer, ShieldCheck, CreditCard, Users, Play, RotateCcw } from "lucide-react";
+import { SectionHeader, StepNav } from "@/components/StepNav";
 import { useExperience } from "@/lib/experience-store";
+import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 
 export const Route = createFileRoute("/experience/secops/why")({
   head: () => ({ meta: [{ title: "Why SecOps — SecOps Experience" }] }),
@@ -10,79 +12,269 @@ export const Route = createFileRoute("/experience/secops/why")({
 
 const FEATURES = [
   {
-    icon: TimerReset,
+    icon: Timer,
     title: "Faster Provisioning",
-    desc: "Automate user access from request to approval.",
+    desc: "Automate access requests in minutes.",
   },
   {
     icon: ShieldCheck,
-    title: "Real-Time SoD Analysis",
-    desc: "Prevent segregation-of-duties conflicts instantly.",
+    title: "Real-Time SoD",
+    desc: "Detect conflicts before approvals.",
   },
   {
-    icon: IdCard,
-    title: "Smart License Management",
-    desc: "Optimize SAP licenses before audits and renewals.",
+    icon: CreditCard,
+    title: "License Optimization",
+    desc: "Reduce SAP licensing costs.",
   },
   {
-    icon: Workflow,
-    title: "Unified Access Governance",
-    desc: "One platform for users, approvals, SoD, and compliance.",
+    icon: Users,
+    title: "Unified Governance",
+    desc: "Manage users and compliance centrally.",
   },
 ];
+
+const logs = [
+  "Establishing RFC connection to SAP S/4HANA...",
+  "Querying user master record database (2,408 active users)...",
+  "Running real-time Segregation of Duties (SoD) audit ruleset...",
+  "Analyzing license allocation (reclassifying 184 Professional licenses)...",
+  "Generating audit-ready compliance packages and evidence logs...",
+  "SecOps Optimization Sequence completed successfully.",
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 110,
+      damping: 14,
+    },
+  },
+};
 
 function WhyPage() {
   const incVideos = useExperience((s) => s.incVideos);
   const addAchievement = useExperience((s) => s.addAchievement);
   const complete = useExperience((s) => s.complete);
 
+  const [status, setStatus] = useState<"idle" | "playing" | "completed">("idle");
+  const [progress, setProgress] = useState(0);
+  const [logIdx, setLogIdx] = useState(0);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | undefined;
+    if (status === "playing") {
+      interval = setInterval(() => {
+        setProgress((p) => {
+          if (p >= 100) {
+            if (interval) clearInterval(interval);
+            setStatus("completed");
+            complete("why");
+            return 100;
+          }
+          const nextP = p + 2.5; // Reaches 100 in 4 seconds
+          setLogIdx(Math.min(Math.floor((nextP / 100) * logs.length), logs.length - 1));
+
+          // When the video reaches ~90% watched, animate the progress updates
+          if (nextP >= 90 && p < 90) {
+            complete("why");
+          }
+
+          return nextP;
+        });
+      }, 100);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [status, complete]);
+
+  const handlePlay = () => {
+    setStatus("playing");
+    setProgress(0);
+    setLogIdx(0);
+    incVideos();
+    addAchievement("firstVideo");
+  };
+
+  const handleReset = () => {
+    setStatus("playing");
+    setProgress(0);
+    setLogIdx(0);
+    incVideos();
+  };
+
   return (
-    <div>
+    <div className="space-y-8 select-none">
       <SectionHeader
         eyebrow="Step 2 · Why SecOps"
         title="Why enterprise SAP teams choose SecOps"
         description="A quick tour of the problems SecOps solves, why the manual approach breaks down, and what changes on day one."
       />
 
-      <div className="mt-6 flex flex-col gap-8 w-full max-w-5xl">
-        {/* Extended Video Block */}
-        <div className="w-full aspect-video min-h-[300px] max-h-[520px] rounded-3xl overflow-hidden shadow-md">
-          <VideoBlock
-            label="Why SecOps · 2:48"
-            className="w-full h-full"
-            onPlay={() => {
-              incVideos();
-              addAchievement("firstVideo");
-            }}
-            onComplete={() => {
-              complete("why");
-            }}
-          />
-        </div>
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-stretch mt-6">
+        {/* Left Column: Video Block */}
+        <div className="xl:col-span-7 flex flex-col justify-between">
+          {/* Custom Premium Learning Video Card */}
+          <div className="relative w-full h-[320px] xl:h-[380px] rounded-[24px] overflow-hidden border border-border bg-[#0B0F19] shadow-md hover:shadow-lg transition-all duration-300 group hover:translate-y-[-2px]">
+            {status === "idle" && (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] to-[#020617] text-white flex flex-col md:flex-row">
+                {/* Left Half: Watch Info */}
+                <div
+                  onClick={handlePlay}
+                  className="flex-1 p-6 md:p-8 flex flex-col justify-between cursor-pointer group/inner select-none"
+                >
+                  <div>
+                    <span className="text-[9px] font-bold text-white bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/20">
+                      Why SecOps
+                    </span>
+                    <h3 className="mt-4 font-display text-xl md:text-2xl font-medium tracking-tight text-white leading-tight">
+                      Walkthrough Demo
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1 font-sans">
+                      2 min 48 sec walkthrough
+                    </p>
+                  </div>
 
-        {/* Feature Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {FEATURES.map((f, i) => {
-            const Icon = f.icon;
-            return (
-              <div
-                key={i}
-                className="group flex flex-col p-6 bg-[#F6F5F2] hover:bg-[#F6F5F2]/90 border border-transparent hover:border-[#204CED]/15 hover:shadow-[0_10px_30px_rgba(32,76,237,0.06)] rounded-[20px] transition-all duration-300 hover:-translate-y-1"
-              >
-                {/* Icon Container: 44x44px circle in #204CED */}
-                <div className="w-11 h-11 flex items-center justify-center rounded-full bg-[#204CED] text-white shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105">
-                  <Icon className="size-5 stroke-[2.25]" />
+                  <div className="flex items-center gap-3.5 mt-4">
+                    <div className="grid size-11 place-items-center rounded-full bg-primary text-white shadow-lg transition-transform duration-300 group-hover/inner:scale-105 group-hover/inner:bg-primary/90 shadow-primary/30">
+                      <Play className="ml-0.5 size-5 fill-white" />
+                    </div>
+                    <span className="text-[13px] font-bold text-slate-200 group-hover/inner:text-white transition-colors">
+                      Watch now
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {status === "playing" && (
+              <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-6 font-mono text-xs text-primary-foreground bg-[#090D1A]">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="flex items-center gap-1.5 text-primary font-semibold text-[10px] md:text-xs">
+                    <span className="size-2 rounded-full bg-primary animate-pulse" />
+                    SECURE AUDIT PIPELINE ACTIVE
+                  </span>
+                  <span className="text-slate-400 font-semibold text-[10px] md:text-xs">
+                    {Math.round(progress)}%
+                  </span>
                 </div>
 
-                <h3 className="mt-4 font-display text-[18px] font-semibold text-foreground tracking-tight leading-snug">
-                  {f.title}
-                </h3>
-                <p className="mt-2 text-[14px] text-[#667085] leading-relaxed font-normal">
-                  {f.desc}
-                </p>
+                <div className="flex-1 flex flex-col justify-center space-y-2 max-w-lg mx-auto w-full text-left my-4">
+                  {logs.slice(0, logIdx + 1).map((log, index) => (
+                    <div
+                      key={index}
+                      className={`transition-all duration-300 text-[11px] md:text-xs ${
+                        index === logIdx ? "text-primary font-medium" : "text-slate-300/80"
+                      }`}
+                    >
+                      <span className="text-primary mr-2 font-bold">&gt;</span>
+                      {log}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Player controls */}
+                <div className="space-y-2">
+                  <div className="relative h-1 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div
+                      className="absolute inset-y-0 left-0 bg-primary rounded-full transition-all duration-100"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-slate-500">
+                    <span>0:00</span>
+                    <span className="uppercase tracking-wider font-semibold">
+                      SIMULATING SECURE AUDIT WORKFLOW
+                    </span>
+                    <span>0:04</span>
+                  </div>
+                </div>
               </div>
-            );
-          })}
+            )}
+
+            {status === "completed" && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white bg-[#0B0F19]/95 p-6 text-center">
+                <div className="grid size-12 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="size-5 stroke-2"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-base font-bold text-white">Walkthrough Completed</p>
+                  <p className="mt-1 text-xs text-slate-400">
+                    Milestone Unlocked: Step 2 Done! You're ready to proceed.
+                  </p>
+                </div>
+                <button
+                  onClick={handleReset}
+                  className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 px-4 py-1.5 text-xs font-semibold hover:scale-[1.02] active:scale-95 transition-all text-white cursor-pointer"
+                >
+                  <RotateCcw className="size-3.5" /> Replay Walkthrough
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Key Takeaways cards */}
+        <div className="xl:col-span-5 flex flex-col justify-between space-y-4">
+          <div className="space-y-4">
+            <div className="border-b border-border/60 pb-2">
+              <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-primary">
+                Key Takeaways
+              </p>
+            </div>
+
+            {/* Feature list staggered animations */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+            >
+              {FEATURES.map((f, i) => {
+                const Icon = f.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    variants={cardVariants}
+                    className="group flex flex-col p-5 bg-[#F6F5F2] dark:bg-surface/50 border border-transparent hover:border-[#204CED]/40 rounded-[20px] h-[135px] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.04)]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex size-7 items-center justify-center rounded-full bg-primary/15 text-primary shrink-0 border border-primary/20">
+                        <Icon className="size-4 stroke-[2.25]" />
+                      </div>
+                      <h3 className="font-display text-[14px] font-medium text-slate-800 dark:text-slate-100 tracking-tight leading-tight">
+                        {f.title}
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-[12px] text-slate-500 dark:text-slate-400 leading-snug font-normal line-clamp-2">
+                      {f.desc}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
         </div>
       </div>
 

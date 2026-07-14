@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useMatches, useRouterState } from "@tans
 import { useState } from "react";
 import {
   Check,
-  Sparkle,
+  Robot,
   X,
   CaretRight,
   ChatCircle,
@@ -82,7 +82,7 @@ function SecOpsLayout() {
           </div>
 
           <div className="hidden items-center gap-2 md:flex shrink-0">
-            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               {pct}% Complete
             </span>
           </div>
@@ -172,12 +172,30 @@ function SecOpsLayout() {
                 <Clock className="size-3" /> ~12 min
               </span>
             </div>
-            <p className="mt-2 font-display text-lg font-semibold">{pct}% Complete</p>
+            <p className="mt-2 font-display text-lg font-medium">{pct}% Complete</p>
             <div className="mt-2 h-1 overflow-hidden rounded-full bg-border">
               <div
                 className="h-full rounded-full bg-primary transition-all"
                 style={{ width: `${pct}%` }}
               />
+            </div>
+
+            {/* Sidebar metadata breakdown */}
+            <div className="mt-4 pt-4 border-t border-border/50 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-sans">
+              <div>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground/60 tracking-wider">
+                  Estimated Time
+                </p>
+                <p className="text-[13px] font-medium text-foreground mt-0.5">12 minutes</p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold text-muted-foreground/60 tracking-wider">
+                  Current Step
+                </p>
+                <p className="text-[13px] font-medium text-foreground mt-0.5">
+                  {currentIdx + 1} / {STEPS.length}
+                </p>
+              </div>
             </div>
 
             <nav className="mt-6 space-y-1">
@@ -230,7 +248,7 @@ function SecOpsLayout() {
             <div className="mt-4">
               <Link
                 to="/experience/secops/book"
-                className="w-full py-2.5 rounded-xl bg-white hover:bg-white/95 text-[#204CED] font-semibold text-xs transition duration-200 text-center block shadow-sm active:scale-98 font-sans"
+                className="w-full py-2.5 rounded-xl bg-white hover:bg-white/95 text-[#204CED] font-medium text-xs transition duration-200 text-center block shadow-sm active:scale-98 font-sans"
               >
                 Schedule Free Scan
               </Link>
@@ -252,7 +270,7 @@ function SecOpsLayout() {
         className="fixed bottom-6 right-6 z-40 inline-flex size-12 md:size-auto md:h-auto items-center justify-center md:justify-start gap-2 rounded-full bg-primary p-3 md:px-5 md:py-3 text-sm font-medium text-primary-foreground shadow-float transition hover:bg-primary-hover hover:scale-105 active:scale-95"
         aria-label="Open AI Expert"
       >
-        <Sparkle className="size-5 md:size-4" weight="fill" />
+        <Robot className="size-5 md:size-4" weight="fill" />
         <span className="hidden md:inline">Ask AI Expert</span>
       </button>
       {aiOpen && <AiDrawer onClose={() => setAiOpen(false)} />}
@@ -290,7 +308,7 @@ function AiDrawer({ onClose }: { onClose: () => void }) {
       <aside className="flex w-full max-w-md flex-col bg-background shadow-float">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-2">
-            <Sparkle className="size-4 text-primary" />
+            <Robot className="size-4 text-primary" />
             <p className="font-display text-sm font-semibold">AI Expert</p>
           </div>
           <button

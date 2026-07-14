@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useExperience } from "@/lib/experience-store";
-import { User, Mail, Users, CreditCard, HelpCircle, LogOut } from "lucide-react";
+import { User, Mail, HelpCircle, LogOut } from "lucide-react";
 
 export function UserProfileMenu() {
   const user = useExperience((s) => s.user);
@@ -59,35 +59,6 @@ export function UserProfileMenu() {
 
           {/* Menu Items List */}
           <div className="space-y-0.5">
-            {/* Community */}
-            <button className="w-full flex items-center justify-between rounded-xl px-3.5 py-2.5 hover:bg-muted/50 dark:hover:bg-surface/50 transition duration-150 text-left cursor-pointer group">
-              <div className="flex items-center gap-3">
-                <Users className="size-4.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <span className="text-[13px] font-medium text-foreground/90 group-hover:text-foreground transition-colors">
-                  Community
-                </span>
-              </div>
-              <span className="text-[10px] font-semibold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-full">
-                Active
-              </span>
-            </button>
-
-            {/* Subscription */}
-            <button className="w-full flex items-center justify-between rounded-xl px-3.5 py-2.5 hover:bg-muted/50 dark:hover:bg-surface/50 transition duration-150 text-left cursor-pointer group">
-              <div className="flex items-center gap-3">
-                <CreditCard className="size-4.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <span className="text-[13px] font-medium text-foreground/90 group-hover:text-foreground transition-colors">
-                  Subscription
-                </span>
-              </div>
-              <span className="inline-flex items-center gap-0.5 rounded-full bg-pink-100 dark:bg-pink-950/40 px-2 py-0.5 text-[10px] font-bold text-pink-700 dark:text-pink-400 border border-pink-200/50">
-                ⚡ PRO
-              </span>
-            </button>
-
-            {/* Separator Line */}
-            <div className="border-t border-border/50 my-1.5" />
-
             {/* Help Center */}
             <button className="w-full flex items-center gap-3 rounded-xl px-3.5 py-2.5 hover:bg-muted/50 dark:hover:bg-surface/50 transition duration-150 text-left cursor-pointer group">
               <HelpCircle className="size-4.5 text-muted-foreground group-hover:text-foreground transition-colors" />

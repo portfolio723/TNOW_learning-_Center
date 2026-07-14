@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Send, Sparkles, BookOpen, PlayCircle } from "lucide-react";
+import { Send, Bot, BookOpen, PlayCircle } from "lucide-react";
 import { SectionHeader, StepNav } from "@/components/StepNav";
 import { AI_ANSWERS, AI_SUGGESTIONS } from "@/lib/experience-data";
 import { useExperience } from "@/lib/experience-store";
@@ -75,7 +75,7 @@ function AiPage() {
           style={{ borderRadius: 16 }}
         >
           <div className="flex items-center gap-2 border-b border-border px-4 py-3 bg-card/40">
-            <Sparkles className="size-4 text-primary" />
+            <Bot className="size-4 text-primary" />
             <p className="font-display text-sm font-semibold">SecOps Expert</p>
             <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
               online
@@ -95,7 +95,7 @@ function AiPage() {
                 ) : (
                   <div className="flex gap-3 max-w-[85%] items-start">
                     <div className="grid size-8 place-items-center rounded-full border border-primary/20 bg-primary/10 text-primary shrink-0 shadow-sm mt-0.5">
-                      <Sparkles className="size-4" />
+                      <Bot className="size-4" />
                     </div>
                     <div className="rounded-2xl bg-surface border border-border/50 text-foreground px-4 py-2.5 text-sm leading-relaxed shadow-sm rounded-tl-none">
                       <p className="whitespace-pre-line">{m.text}</p>
