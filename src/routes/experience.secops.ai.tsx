@@ -1,9 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Send, Bot, BookOpen, PlayCircle } from "lucide-react";
+import { Send, BookOpen, PlayCircle } from "lucide-react";
 import { SectionHeader, StepNav } from "@/components/StepNav";
 import { AI_ANSWERS, AI_SUGGESTIONS } from "@/lib/experience-data";
 import { useExperience } from "@/lib/experience-store";
+
+const ClubIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 256 256"
+    fill="currentColor"
+    className={className}
+    {...props}
+  >
+    <path d="M184,88c-.78,0-1.56,0-2.33,0a56,56,0,1,0-107.34,0c-.78,0-1.55,0-2.33,0A56,56,0,1,0,96.54,194.35l-8.2,27.35A8,8,0,0,0,96,232h64a8,8,0,0,0,7.66-10.3l-8.2-27.35A56,56,0,1,0,184,88Zm0,96a40,40,0,0,1-33.4-18,8,8,0,0,0-14.33,6.71l13,43.26h-42.5l13-43.26A8,8,0,0,0,105.4,166a40,40,0,1,1-19.93-59.71,8,8,0,0,0,9.33-12,40,40,0,1,1,66.4,0,8,8,0,0,0,9.33,12A40,40,0,1,1,184,184Z" />
+  </svg>
+);
 
 export const Route = createFileRoute("/experience/secops/ai")({
   head: () => ({ meta: [{ title: "AI Expert — SecOps Experience" }] }),
@@ -75,7 +87,9 @@ function AiPage() {
           style={{ borderRadius: 16 }}
         >
           <div className="flex items-center gap-2 border-b border-border px-4 py-3 bg-card/40">
-            <Bot className="size-4 text-primary" />
+            <div className="grid size-7 place-items-center rounded-full bg-primary text-white">
+              <ClubIcon className="size-4 text-white" />
+            </div>
             <p className="font-display text-sm font-semibold">SecOps Expert</p>
             <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
               online
@@ -94,8 +108,8 @@ function AiPage() {
                   </div>
                 ) : (
                   <div className="flex gap-3 max-w-[85%] items-start">
-                    <div className="grid size-8 place-items-center rounded-full border border-primary/20 bg-primary/10 text-primary shrink-0 shadow-sm mt-0.5">
-                      <Bot className="size-4" />
+                    <div className="grid size-8 place-items-center rounded-full bg-primary text-white shrink-0 shadow-sm mt-0.5">
+                      <ClubIcon className="size-4 text-white" />
                     </div>
                     <div className="rounded-2xl bg-surface border border-border/50 text-foreground px-4 py-2.5 text-sm leading-relaxed shadow-sm rounded-tl-none">
                       <p className="whitespace-pre-line">{m.text}</p>
