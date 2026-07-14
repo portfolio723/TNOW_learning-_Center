@@ -146,9 +146,6 @@ function ProductSelection() {
   const [teaserRequested, setTeaserRequested] = useState<Record<string, boolean>>({});
   const [requestLoading, setRequestLoading] = useState(false);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [visibleCards, setVisibleCards] = useState(3);
-
   const user = useExperience((s) => s.user);
   const reset = useExperience((s) => s.reset);
 
@@ -183,33 +180,6 @@ function ProductSelection() {
     return matchesQuery;
   });
 
-  useEffect(() => {
-    const updateVisible = () => {
-      if (window.innerWidth >= 1024) setVisibleCards(3);
-      else if (window.innerWidth >= 768) setVisibleCards(2);
-      else setVisibleCards(1);
-    };
-    updateVisible();
-    window.addEventListener("resize", updateVisible);
-    return () => window.removeEventListener("resize", updateVisible);
-  }, []);
-
-  const maxIndex = Math.max(0, filtered.length - visibleCards);
-
-  useEffect(() => {
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex);
-    }
-  }, [maxIndex, currentIndex]);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - 1, 0));
-  };
-
   return (
     <main className="min-h-dvh bg-background text-foreground">
       <header className="border-b border-border bg-background">
@@ -224,10 +194,7 @@ function ProductSelection() {
       </header>
 
       <section className="mx-auto max-w-7xl px-6 py-14">
-        <p className="text-xs font-medium uppercase tracking-widest text-caption">
-          Step 1 of 2 · Choose your product
-        </p>
-        <h1 className="mt-3 font-display text-4xl font-normal leading-tight md:text-5xl">
+        <h1 className="font-display text-4xl font-normal leading-tight md:text-5xl">
           Choose your experience
         </h1>
         <p className="mt-3 max-w-2xl text-[15px] text-muted-foreground">
@@ -263,47 +230,16 @@ function ProductSelection() {
           </div>
         </div>
 
-        {/* Carousel Layout */}
-        <div className="relative mt-12 overflow-hidden py-4 px-1">
-          <div className="overflow-hidden -mx-3">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{
-                transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
-              }}
-            >
-              {filtered.map((p) => (
-                <div key={p.id} className="w-full md:w-1/2 lg:w-1/3 shrink-0 px-3">
-                  <ProductCard
-                    product={p}
-                    onClick={() => handleCardClick(p.id, p.status === "available")}
-                  />
-                </div>
-              ))}
+        {/* Grid Layout (3x2 format for 5 cards) */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((p) => (
+            <div key={p.id} className="w-full">
+              <ProductCard
+                product={p}
+                onClick={() => handleCardClick(p.id, p.status === "available")}
+              />
             </div>
-          </div>
-
-          {/* Carousel Navigation - Right Down side */}
-          {filtered.length > visibleCards && (
-            <div className="flex justify-end gap-3 mt-8">
-              <button
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="flex size-12 items-center justify-center rounded-full border border-border bg-background text-foreground transition-all hover:bg-muted active:scale-95 disabled:pointer-events-none disabled:opacity-30 cursor-pointer shadow-sm"
-                aria-label="Previous slide"
-              >
-                <ArrowLeft className="size-5" />
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={currentIndex >= maxIndex}
-                className="flex size-12 items-center justify-center rounded-full border border-border bg-background text-foreground transition-all hover:bg-muted active:scale-95 disabled:pointer-events-none disabled:opacity-30 cursor-pointer shadow-sm"
-                aria-label="Next slide"
-              >
-                <ArrowRight className="size-5" />
-              </button>
-            </div>
-          )}
+          ))}
         </div>
       </section>
 
@@ -613,32 +549,32 @@ function ProductCard({
 
   const body = (
     <article
-      className={`group relative flex h-[350px] flex-col rounded-[24px] border ${theme.bg} ${theme.border} p-8 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer select-none`}
+      className={`group relative flex h-[260px] flex-col rounded-[20px] border ${theme.bg} ${theme.border} p-6 overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer select-none`}
     >
       {/* Decorative Accent Graphic */}
       {theme.accentSvg}
 
       {/* Top Badge */}
       <div className="z-10 self-start">
-        <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-normal text-[#111111] shadow-sm border border-black/[0.04]">
-          <span className={`size-2 rounded-full ${theme.dotColor}`} />
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-[10px] font-normal text-[#111111] shadow-sm border border-black/[0.04]">
+          <span className={`size-1.5 rounded-full ${theme.dotColor}`} />
           {theme.badgeText}
         </div>
       </div>
 
       {/* Content */}
-      <div className="z-10 mt-8 flex-1 flex flex-col justify-center">
-        <h3 className="font-sans text-[26px] font-normal text-[#111111] leading-none tracking-tight">
+      <div className="z-10 mt-4 flex-1 flex flex-col justify-center">
+        <h3 className="font-sans text-xl font-normal text-[#111111] leading-none tracking-tight">
           {product.name}
         </h3>
-        <p className="mt-4 text-sm text-[#555555] leading-relaxed max-w-[85%] font-normal">
+        <p className="mt-2 text-[13px] text-[#555555] leading-relaxed max-w-[90%] font-normal line-clamp-3">
           {product.description}
         </p>
       </div>
 
       {/* CTA bottom left */}
-      <div className="z-10 mt-auto pt-4">
-        <span className="inline-block border-b border-current pb-0.5 font-bold text-xs tracking-wide text-foreground hover:opacity-85 transition-opacity">
+      <div className="z-10 mt-auto pt-3">
+        <span className="inline-block border-b border-current pb-0.5 font-bold text-[11px] tracking-wide text-foreground hover:opacity-85 transition-opacity">
           {product.cta} →
         </span>
       </div>
