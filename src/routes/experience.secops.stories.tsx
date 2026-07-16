@@ -49,8 +49,10 @@ function StoriesPage() {
           <button
             key={s.id}
             onClick={() => openStory(s.id)}
-            className={`text-left rounded-3xl border border-border bg-card p-6 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elevate ${
-              read.includes(s.id) ? "ring-1 ring-primary/20" : ""
+            className={`text-left rounded-3xl border p-6 transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40 ${
+              read.includes(s.id)
+                ? "border-primary/40 bg-gradient-to-b from-[#F3F7FF] to-[#EDF4FF]"
+                : "border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF]"
             }`}
             style={{ borderRadius: 20 }}
           >
@@ -72,11 +74,11 @@ function StoriesPage() {
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
             <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
               onClick={() => setOpenId(null)}
             />
             <div
-              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-float"
+              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden rounded-3xl border border-white/40 bg-white/95 backdrop-blur-md shadow-[0_25px_60px_rgba(32,76,237,0.14)]"
               style={{ borderRadius: 24 }}
             >
               <div className="flex items-start justify-between border-b border-border px-6 py-4 shrink-0">

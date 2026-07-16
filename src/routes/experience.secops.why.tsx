@@ -126,112 +126,113 @@ function WhyPage() {
       />
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-stretch mt-6">
-        {/* Left Column: Video Block */}
-        <div className="xl:col-span-7 flex flex-col justify-between">
-          {/* Custom Premium Learning Video Card */}
-          <div className="relative w-full h-[320px] xl:h-[380px] rounded-[24px] overflow-hidden border border-border bg-[#0B0F19] shadow-md hover:shadow-lg transition-all duration-300 group hover:translate-y-[-2px]">
-            {status === "idle" && (
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] to-[#020617] text-white flex flex-col md:flex-row">
-                {/* Left Half: Watch Info */}
-                <div
-                  onClick={handlePlay}
-                  className="flex-1 p-6 md:p-8 flex flex-col justify-between cursor-pointer group/inner select-none"
-                >
-                  <div>
-                    <span className="text-[9px] font-bold text-white bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/20">
-                      Why SecOps
+        {/* Left Column: Video Block wrapped in premium card container */}
+        <div className="xl:col-span-7">
+          <div className="p-4 rounded-[28px] border border-[#E3EBFF] bg-gradient-to-b from-white to-[#F7FAFF] shadow-[0_12px_30px_rgba(32,76,237,0.04)] h-full flex flex-col justify-center">
+            <div className="relative w-full h-[320px] xl:h-[340px] rounded-[20px] overflow-hidden border border-slate-800 bg-[#0B0F19]">
+              {status === "idle" && (
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] to-[#020617] text-white flex flex-col md:flex-row">
+                  {/* Left Half: Watch Info */}
+                  <div
+                    onClick={handlePlay}
+                    className="flex-1 p-6 md:p-8 flex flex-col justify-between cursor-pointer group/inner select-none"
+                  >
+                    <div>
+                      <span className="text-[9px] font-bold text-white bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/20">
+                        Why SecOps
+                      </span>
+                      <h3 className="mt-4 font-display text-xl md:text-2xl font-medium tracking-tight text-white leading-tight">
+                        Walkthrough Demo
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 font-sans">
+                        2 min 48 sec walkthrough
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3.5 mt-4">
+                      <div className="grid size-11 place-items-center rounded-full bg-primary text-white shadow-lg transition-transform duration-300 group-hover/inner:scale-105 group-hover/inner:bg-primary/90 shadow-primary/30">
+                        <Play className="ml-0.5 size-5 fill-white" />
+                      </div>
+                      <span className="text-[13px] font-bold text-slate-200 group-hover/inner:text-white transition-colors">
+                        Watch now
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {status === "playing" && (
+                <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-6 font-mono text-xs text-primary-foreground bg-[#090D1A]">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="flex items-center gap-1.5 text-primary font-semibold text-[10px] md:text-xs">
+                      <span className="size-2 rounded-full bg-primary animate-pulse" />
+                      SECURE AUDIT PIPELINE ACTIVE
                     </span>
-                    <h3 className="mt-4 font-display text-xl md:text-2xl font-medium tracking-tight text-white leading-tight">
-                      Walkthrough Demo
-                    </h3>
-                    <p className="text-xs text-slate-400 mt-1 font-sans">
-                      2 min 48 sec walkthrough
+                    <span className="text-slate-400 font-semibold text-[10px] md:text-xs">
+                      {Math.round(progress)}%
+                    </span>
+                  </div>
+
+                  <div className="flex-1 flex flex-col justify-center space-y-2 max-w-lg mx-auto w-full text-left my-4">
+                    {logs.slice(0, logIdx + 1).map((log, index) => (
+                      <div
+                        key={index}
+                        className={`transition-all duration-300 text-[11px] md:text-xs ${
+                          index === logIdx ? "text-primary font-medium" : "text-slate-300/80"
+                        }`}
+                      >
+                        <span className="text-primary mr-2 font-bold">&gt;</span>
+                        {log}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Player controls */}
+                  <div className="space-y-2">
+                    <div className="relative h-1 w-full rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className="absolute inset-y-0 left-0 bg-primary rounded-full transition-all duration-100"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-slate-500">
+                      <span>0:00</span>
+                      <span className="uppercase tracking-wider font-semibold">
+                        SIMULATING SECURE AUDIT WORKFLOW
+                      </span>
+                      <span>0:04</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {status === "completed" && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white bg-[#0B0F19]/95 p-6 text-center">
+                  <div className="grid size-12 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="size-5 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-base font-bold text-white">Walkthrough Completed</p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Milestone Unlocked: Step 2 Done! You're ready to proceed.
                     </p>
                   </div>
-
-                  <div className="flex items-center gap-3.5 mt-4">
-                    <div className="grid size-11 place-items-center rounded-full bg-primary text-white shadow-lg transition-transform duration-300 group-hover/inner:scale-105 group-hover/inner:bg-primary/90 shadow-primary/30">
-                      <Play className="ml-0.5 size-5 fill-white" />
-                    </div>
-                    <span className="text-[13px] font-bold text-slate-200 group-hover/inner:text-white transition-colors">
-                      Watch now
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {status === "playing" && (
-              <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-6 font-mono text-xs text-primary-foreground bg-[#090D1A]">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <span className="flex items-center gap-1.5 text-primary font-semibold text-[10px] md:text-xs">
-                    <span className="size-2 rounded-full bg-primary animate-pulse" />
-                    SECURE AUDIT PIPELINE ACTIVE
-                  </span>
-                  <span className="text-slate-400 font-semibold text-[10px] md:text-xs">
-                    {Math.round(progress)}%
-                  </span>
-                </div>
-
-                <div className="flex-1 flex flex-col justify-center space-y-2 max-w-lg mx-auto w-full text-left my-4">
-                  {logs.slice(0, logIdx + 1).map((log, index) => (
-                    <div
-                      key={index}
-                      className={`transition-all duration-300 text-[11px] md:text-xs ${
-                        index === logIdx ? "text-primary font-medium" : "text-slate-300/80"
-                      }`}
-                    >
-                      <span className="text-primary mr-2 font-bold">&gt;</span>
-                      {log}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Player controls */}
-                <div className="space-y-2">
-                  <div className="relative h-1 w-full rounded-full bg-slate-800 overflow-hidden">
-                    <div
-                      className="absolute inset-y-0 left-0 bg-primary rounded-full transition-all duration-100"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] text-slate-500">
-                    <span>0:00</span>
-                    <span className="uppercase tracking-wider font-semibold">
-                      SIMULATING SECURE AUDIT WORKFLOW
-                    </span>
-                    <span>0:04</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {status === "completed" && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white bg-[#0B0F19]/95 p-6 text-center">
-                <div className="grid size-12 place-items-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="size-5 stroke-2"
-                    fill="none"
-                    stroke="currentColor"
+                  <button
+                    onClick={handleReset}
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 px-4 py-1.5 text-xs font-semibold hover:scale-[1.02] active:scale-95 transition-all text-white cursor-pointer"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
+                    <RotateCcw className="size-3.5" /> Replay Walkthrough
+                  </button>
                 </div>
-                <div>
-                  <p className="text-base font-bold text-white">Walkthrough Completed</p>
-                  <p className="mt-1 text-xs text-slate-400">
-                    Milestone Unlocked: Step 2 Done! You're ready to proceed.
-                  </p>
-                </div>
-                <button
-                  onClick={handleReset}
-                  className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 px-4 py-1.5 text-xs font-semibold hover:scale-[1.02] active:scale-95 transition-all text-white cursor-pointer"
-                >
-                  <RotateCcw className="size-3.5" /> Replay Walkthrough
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -257,7 +258,7 @@ function WhyPage() {
                   <motion.div
                     key={i}
                     variants={cardVariants}
-                    className="group flex flex-col p-5 bg-[#F6F5F2] dark:bg-surface/50 border border-transparent hover:border-[#204CED]/40 rounded-[20px] h-[135px] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.04)]"
+                    className="group flex flex-col p-5 bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] border border-[#E3EBFF] hover:border-primary/40 rounded-[20px] h-[135px] transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)]"
                   >
                     <div className="flex items-center gap-2">
                       <div className="flex size-7 items-center justify-center rounded-full bg-primary/15 text-primary shrink-0 border border-primary/20">

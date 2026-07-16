@@ -137,7 +137,7 @@ function BookPage() {
       />
 
       <div className="mt-10 max-w-3xl space-y-6">
-        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]" style={{ borderRadius: 20 }}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/50 pb-4">
             <div>
               <p className="font-display text-lg font-semibold">Pick a time</p>
@@ -224,10 +224,10 @@ function BookPage() {
                   <button
                     key={s}
                     onClick={() => setSlot(s)}
-                    className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${
+                    className={`rounded-2xl border px-4 py-3 text-left text-sm transition-all duration-[150ms] ease-out ${
                       slot === s
-                        ? "border-primary bg-primary/5 text-primary ring-1 ring-primary/30"
-                        : "border-border bg-background text-foreground hover:border-primary/30"
+                        ? "border-primary/70 bg-gradient-to-b from-[#F3F7FF] to-[#EDF4FF] text-primary shadow-[0_4px_15px_rgba(32,76,237,0.04)]"
+                        : "border-[#E3EBFF] bg-white text-foreground hover:border-primary/40 hover:bg-[#FDFEFF]"
                     }`}
                     style={{ borderRadius: 16 }}
                   >
@@ -273,7 +273,7 @@ function BookPage() {
           )}
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]" style={{ borderRadius: 20 }}>
           <label className="font-display text-lg font-semibold">
             What should our consultant focus on?
           </label>
@@ -282,7 +282,7 @@ function BookPage() {
             onChange={(e) => setNotes(e.target.value)}
             rows={5}
             placeholder="e.g. Migration from SAP GRC, S/4 rollout, license optimization for 8,000 users…"
-            className="mt-4 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none placeholder:text-caption focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="mt-4 w-full rounded-2xl border border-[#E3EBFF] bg-white px-4 py-3 text-sm outline-none placeholder:text-caption focus:border-[#204CED] focus:ring-2 focus:ring-[#204CED]/15 transition-all duration-200"
             style={{ borderRadius: 16 }}
           />
         </div>

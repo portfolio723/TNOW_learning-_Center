@@ -181,7 +181,7 @@ function ProductSelection() {
   });
 
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-[#FFFFFF] text-foreground relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(32,76,237,0.06),_transparent_45%)]">
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link to="/experience" className="flex items-center">
@@ -549,10 +549,12 @@ function ProductCard({
 
   const body = (
     <article
-      className={`group relative flex h-[260px] flex-col rounded-[20px] border ${theme.bg} ${theme.border} p-6 overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer select-none`}
+      className="group relative flex h-[260px] flex-col rounded-[20px] border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 overflow-hidden transition-all duration-[180ms] ease-out hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40 hover:-translate-y-[3px] hover:scale-[1.01] cursor-pointer select-none"
     >
       {/* Decorative Accent Graphic */}
-      {theme.accentSvg}
+      <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity pointer-events-none">
+        {theme.accentSvg}
+      </div>
 
       {/* Top Badge */}
       <div className="z-10 self-start">

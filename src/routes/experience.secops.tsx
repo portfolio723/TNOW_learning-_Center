@@ -71,7 +71,7 @@ function SecOpsLayout() {
   const nextStep = STEPS[currentIdx + 1];
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-dvh bg-[#FFFFFF] text-foreground relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(32,76,237,0.06),_transparent_45%)]">
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 md:px-6 py-3">
@@ -287,15 +287,18 @@ function SecOpsLayout() {
         </main>
       </div>
 
-      {/* Persistent AI drawer */}
-      <button
-        onClick={() => setAiOpen(true)}
-        className="fixed bottom-6 right-6 z-40 inline-flex size-12 md:size-auto md:h-auto items-center justify-center md:justify-start gap-2 rounded-full bg-primary p-3 md:px-5 md:py-3 text-sm font-medium text-primary-foreground shadow-float transition hover:bg-primary-hover hover:scale-105 active:scale-95"
-        aria-label="Open AI Expert"
-      >
-        <CloverIcon className="size-5 md:size-4 text-white" />
-        <span className="hidden md:inline">Ask AI Expert</span>
-      </button>
+      {/* Persistent AI drawer with soft glow */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <div className="absolute inset-0 bg-primary opacity-30 blur-xl rounded-full scale-110 pointer-events-none" />
+        <button
+          onClick={() => setAiOpen(true)}
+          className="relative inline-flex size-12 md:size-auto md:h-auto items-center justify-center md:justify-start gap-2 rounded-full bg-primary p-3 md:px-5 md:py-3 text-sm font-medium text-primary-foreground shadow-float transition hover:bg-primary-hover hover:scale-105 active:scale-95"
+          aria-label="Open AI Expert"
+        >
+          <CloverIcon className="size-5 md:size-4 text-white" />
+          <span className="hidden md:inline">Ask AI Expert</span>
+        </button>
+      </div>
       {aiOpen && <AiDrawer onClose={() => setAiOpen(false)} />}
     </div>
   );
@@ -327,8 +330,8 @@ function AiDrawer({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex">
-      <div className="flex-1 bg-foreground/20" onClick={onClose} />
-      <aside className="flex w-full max-w-md flex-col bg-background shadow-float">
+      <div className="flex-1 bg-foreground/10 backdrop-blur-[2px]" onClick={onClose} />
+      <aside className="flex w-full max-w-md flex-col bg-white/95 backdrop-blur-md border-l border-white/40 shadow-[0_15px_50px_rgba(32,76,237,0.12)]">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="flex items-center gap-2">
             <div className="grid size-7 place-items-center rounded-full bg-primary text-white">

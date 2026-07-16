@@ -34,16 +34,16 @@ function Welcome() {
         ].map((k) => (
           <div
             key={k.label}
-            className="relative overflow-hidden rounded-[20px] border border-border bg-card p-8 h-[220px] flex flex-col justify-end group hover:border-[#204CED]/15 hover:shadow-[0_12px_30px_rgba(32,76,237,0.04)] transition-all duration-300"
+            className="relative overflow-hidden rounded-[20px] border border-[#D8E5FF] bg-gradient-to-b from-white to-[#F4F8FF] p-8 h-[220px] flex flex-col justify-end group transition-all duration-[180ms] ease-out hover:border-[#204CED]/40 hover:shadow-[0_12px_35px_rgba(32,76,237,0.08)] hover:-translate-y-[3px] hover:scale-[1.01]"
           >
-            {/* Giant watermark in background */}
-            <div className="absolute right-[-10px] top-[-20px] text-[110px] font-extrabold text-[#204CED]/[0.06] dark:text-[#204CED]/[0.04] select-none pointer-events-none leading-none tracking-tighter">
+            {/* Giant watermark in background with Stripe style */}
+            <div className="absolute right-[-10px] top-[-20px] text-[110px] font-extrabold text-[#204CED]/[0.04] select-none pointer-events-none leading-none tracking-tighter">
               {k.watermark}
             </div>
 
             {/* Main KPI and Description grouped closely at the bottom */}
             <div className="z-10 flex flex-col gap-1.5">
-              <p className="font-display text-[32px] font-medium text-foreground tracking-tight leading-none">
+              <p className="font-display text-[32px] font-medium text-[#204CED] tracking-tight leading-none">
                 {k.kpi}
               </p>
               <p className="text-[13px] text-muted-foreground leading-normal font-normal md:max-w-[200px]">
@@ -76,7 +76,7 @@ function Welcome() {
           ].map((f) => (
             <div
               key={f.title}
-              className="rounded-3xl border border-border bg-background p-6"
+              className="border border-[#E3EBFF] bg-gradient-to-b from-white to-[#F7FAFF] p-6 transition-all duration-[180ms] ease-out hover:border-primary/30 hover:shadow-[0_12px_30px_rgba(32,76,237,0.05)] hover:-translate-y-[3px] hover:scale-[1.01]"
               style={{ borderRadius: 20 }}
             >
               <f.icon className="size-5 text-primary" />

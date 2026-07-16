@@ -92,7 +92,7 @@ function TourGrid() {
               key={c.id}
               to="/experience/secops/tour/$capability"
               params={{ capability: c.id }}
-              className="group flex flex-col overflow-hidden rounded-[20px] border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-[#204CED]/15"
+              className="group flex flex-col overflow-hidden rounded-[20px] border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40"
             >
               {/* Top Visual Thumbnail Area */}
               <div className={`relative w-full aspect-[1.9/1] overflow-hidden ${theme.gradient}`}>
@@ -122,7 +122,7 @@ function TourGrid() {
               </div>
 
               {/* Bottom Metadata Content Area */}
-              <div className="flex p-5 gap-3 justify-between items-start flex-1 bg-white dark:bg-card">
+              <div className="flex p-5 gap-3 justify-between items-start flex-1 bg-transparent">
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#204CED]/90 block mb-1.5">
                     SAP Security

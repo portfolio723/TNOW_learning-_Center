@@ -21,14 +21,14 @@ function SuccessPage() {
       </p>
 
       <div className="mt-10 grid gap-4 text-left md:grid-cols-2">
-        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)] transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40" style={{ borderRadius: 20 }}>
           <Calendar className="size-5 text-primary" />
           <p className="mt-3 font-display text-base font-semibold">Calendar invite sent</p>
           <p className="mt-1 text-sm text-muted-foreground">
             Check your inbox for the Google Calendar and Outlook attachments.
           </p>
         </div>
-        <div className="rounded-3xl border border-border bg-card p-6" style={{ borderRadius: 20 }}>
+        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)] transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40" style={{ borderRadius: 20 }}>
           <Mail className="size-5 text-primary" />
           <p className="mt-3 font-display text-base font-semibold">Prep pack en route</p>
           <p className="mt-1 text-sm text-muted-foreground">
