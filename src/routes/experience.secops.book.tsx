@@ -137,7 +137,10 @@ function BookPage() {
       />
 
       <div className="mt-10 max-w-3xl space-y-6">
-        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]" style={{ borderRadius: 20 }}>
+        <div
+          className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]"
+          style={{ borderRadius: 20 }}
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-border/50 pb-4">
             <div>
               <p className="font-display text-lg font-semibold">Pick a time</p>
@@ -273,7 +276,10 @@ function BookPage() {
           )}
         </div>
 
-        <div className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]" style={{ borderRadius: 20 }}>
+        <div
+          className="rounded-3xl border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 shadow-[0_12px_40px_rgba(32,76,237,0.05)]"
+          style={{ borderRadius: 20 }}
+        >
           <label className="font-display text-lg font-semibold">
             What should our consultant focus on?
           </label>

@@ -549,7 +549,7 @@ function ProductCard({
 
   const body = (
     <article
-      className="group relative flex h-[260px] flex-col rounded-[20px] border border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF] p-6 overflow-hidden transition-all duration-[180ms] ease-out hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40 hover:-translate-y-[3px] hover:scale-[1.01] cursor-pointer select-none"
+      className={`group relative flex h-[260px] flex-col rounded-[20px] border ${theme.border} ${theme.bg} p-6 overflow-hidden transition-all duration-[180ms] ease-out hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40 hover:-translate-y-[3px] hover:scale-[1.01] cursor-pointer select-none`}
     >
       {/* Decorative Accent Graphic */}
       <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity pointer-events-none">
