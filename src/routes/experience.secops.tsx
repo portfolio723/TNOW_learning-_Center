@@ -71,7 +71,7 @@ function SecOpsLayout() {
   const nextStep = STEPS[currentIdx + 1];
 
   return (
-    <div className="min-h-dvh bg-[#FFFFFF] text-foreground relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(32,76,237,0.06),_transparent_45%)]">
+    <div className="min-h-dvh lg:h-screen lg:max-h-screen lg:flex lg:flex-col bg-[#FFFFFF] text-foreground relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(32,76,237,0.06),_transparent_45%)]">
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-3 px-4 md:px-6 py-3">
@@ -183,20 +183,20 @@ function SecOpsLayout() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-[1400px] gap-8 px-4 sm:px-6 py-6 md:py-8">
+      <div className="mx-auto flex w-full max-w-[1400px] gap-8 px-4 sm:px-6 py-6 md:py-8 lg:flex-1 lg:h-0 lg:overflow-hidden lg:py-5 lg:gap-6">
         {/* Sidebar */}
-        <aside className="sticky top-[73px] hidden h-[calc(100dvh-100px)] w-64 shrink-0 flex-col lg:flex overflow-y-auto scrollbar-none pr-1">
-          <div className="rounded-2xl border border-border bg-card p-5">
+        <aside className="hidden lg:flex w-64 shrink-0 flex-col h-full overflow-y-auto scrollbar-none pr-1 justify-start gap-3 pb-2">
+          <div className="rounded-2xl border border-border bg-card p-4">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium uppercase tracking-widest text-caption">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-caption">
                 Your journey
               </p>
-              <span className="inline-flex items-center gap-1 text-[11px] text-caption">
+              <span className="inline-flex items-center gap-1 text-[10px] text-caption">
                 <Clock className="size-3" /> ~12 min
               </span>
             </div>
-            <p className="mt-2 font-display text-lg font-medium">{pct}% Complete</p>
-            <div className="mt-2 h-1 overflow-hidden rounded-full bg-border">
+            <p className="mt-1.5 font-display text-base font-semibold">{pct}% Complete</p>
+            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-border">
               <div
                 className="h-full rounded-full bg-primary transition-all"
                 style={{ width: `${pct}%` }}
@@ -204,24 +204,24 @@ function SecOpsLayout() {
             </div>
 
             {/* Sidebar metadata breakdown */}
-            <div className="mt-4 pt-4 border-t border-border/50 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-sans">
+            <div className="mt-3 pt-3 border-t border-border/50 grid grid-cols-2 gap-y-2.5 gap-x-2 text-xs font-sans">
               <div>
-                <p className="text-[10px] uppercase font-bold text-muted-foreground/60 tracking-wider">
+                <p className="text-[9px] uppercase font-bold text-muted-foreground/60 tracking-wider">
                   Estimated Time
                 </p>
-                <p className="text-[13px] font-medium text-foreground mt-0.5">12 minutes</p>
+                <p className="text-[12px] font-medium text-foreground mt-0.5">12 minutes</p>
               </div>
               <div>
-                <p className="text-[10px] uppercase font-bold text-muted-foreground/60 tracking-wider">
+                <p className="text-[9px] uppercase font-bold text-muted-foreground/60 tracking-wider">
                   Current Step
                 </p>
-                <p className="text-[13px] font-medium text-foreground mt-0.5">
+                <p className="text-[12px] font-medium text-foreground mt-0.5">
                   {currentIdx + 1} / {STEPS.length}
                 </p>
               </div>
             </div>
 
-            <nav className="mt-6 space-y-1">
+            <nav className="mt-4 space-y-0.5">
               {STEPS.map((s, i) => {
                 const isActive = currentStep.id === s.id;
                 const isDone = pathname.includes("/success") || completed[s.id];
@@ -229,14 +229,14 @@ function SecOpsLayout() {
                   <Link
                     key={s.id}
                     to={s.path}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
+                    className={`flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-xs transition ${
                       isActive
-                        ? "bg-primary/10 text-primary"
+                        ? "bg-primary/10 text-primary font-medium"
                         : "text-muted-foreground hover:bg-surface hover:text-foreground"
                     }`}
                   >
                     <span
-                      className={`grid size-6 place-items-center rounded-full text-[11px] font-semibold ${
+                      className={`grid size-5.5 place-items-center rounded-full text-[10px] font-semibold shrink-0 ${
                         isDone
                           ? "bg-primary text-primary-foreground"
                           : isActive
@@ -244,9 +244,9 @@ function SecOpsLayout() {
                             : "border border-border bg-background text-caption"
                       }`}
                     >
-                      {isDone ? <Check className="size-3.5" /> : i + 1}
+                      {isDone ? <Check className="size-3" /> : i + 1}
                     </span>
-                    <span className="font-medium">{s.label}</span>
+                    <span className="truncate">{s.label}</span>
                   </Link>
                 );
               })}
@@ -254,24 +254,24 @@ function SecOpsLayout() {
           </div>
 
           {/* Promo CTA Card */}
-          <div className="mt-4 rounded-2xl bg-[#204CED] text-white p-5 shrink-0 flex flex-col justify-between relative overflow-hidden border border-[#204CED]/10 group">
+          <div className="rounded-xl bg-[#204CED] text-white p-4 shrink-0 flex flex-col justify-between relative overflow-hidden border border-[#204CED]/10 group">
             <div>
-              <span className="inline-block rounded-full bg-white/20 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+              <span className="inline-block rounded-full bg-white/20 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
                 Exclusive Invitation
               </span>
-              <h3 className="mt-3 font-display text-[16px] font-semibold leading-tight text-white">
+              <h3 className="mt-2 font-display text-[14px] font-semibold leading-tight text-white">
                 Book an Interactive SAP Security Workshop
               </h3>
-              <p className="mt-2 text-[11px] text-white/80 leading-normal font-normal">
-                Connect with our top-tier SecOps specialists to analyze your system and review
-                segregation-of-duties risks live.
+              <p className="mt-1 text-[10px] text-white/80 leading-normal font-normal">
+                Connect with our specialists to analyze your system and review segregation-of-duties
+                risks live.
               </p>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-3">
               <Link
                 to="/experience/secops/book"
-                className="w-full py-2.5 rounded-xl bg-white hover:bg-white/95 text-[#204CED] font-medium text-xs transition duration-200 text-center block shadow-sm active:scale-98 font-sans"
+                className="w-full py-2 rounded-lg bg-white hover:bg-white/95 text-[#204CED] font-medium text-[11px] transition duration-200 text-center block shadow-sm active:scale-98 font-sans"
               >
                 Schedule Free Scan
               </Link>
@@ -280,8 +280,8 @@ function SecOpsLayout() {
         </aside>
 
         {/* Main content */}
-        <main className="min-w-0 flex-1 pb-24 md:pb-16">
-          <div className="fade-up">
+        <main className="min-w-0 flex-1 pb-24 md:pb-16 lg:h-full lg:overflow-y-auto lg:pb-6 scrollbar-none">
+          <div className="fade-up lg:h-full lg:flex lg:flex-col">
             <Outlet />
           </div>
         </main>

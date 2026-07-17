@@ -30,44 +30,52 @@ function StoriesPage() {
   }
 
   return (
-    <div>
-      <SectionHeader
-        eyebrow="Step 4 · Customer Stories"
-        title="Enterprise SAP teams already running on SecOps"
-        description="Real outcomes from Global 2000 organizations across manufacturing, pharma, banking, and utilities."
-      />
+    <div className="lg:h-full lg:flex lg:flex-col lg:justify-between">
+      <div>
+        <SectionHeader
+          eyebrow="Step 4 · Customer Stories"
+          title="Enterprise SAP teams already running on SecOps"
+          description="Real outcomes from Global 2000 organizations across manufacturing, pharma, banking, and utilities."
+        />
 
-      <div className="mt-8 flex flex-wrap gap-2">
-        <FilterChip active={industry === null} onClick={() => setIndustry(null)} label="All" />
-        {INDUSTRIES.map((i) => (
-          <FilterChip key={i} active={industry === i} onClick={() => setIndustry(i)} label={i} />
-        ))}
-      </div>
+        <div className="mt-4 lg:mt-3 flex flex-wrap gap-1.5">
+          <FilterChip active={industry === null} onClick={() => setIndustry(null)} label="All" />
+          {INDUSTRIES.map((i) => (
+            <FilterChip key={i} active={industry === i} onClick={() => setIndustry(i)} label={i} />
+          ))}
+        </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
-        {filtered.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => openStory(s.id)}
-            className={`text-left rounded-3xl border p-6 transition-all duration-[180ms] ease-out hover:-translate-y-[3px] hover:scale-[1.01] hover:shadow-[0_12px_30px_rgba(32,76,237,0.06)] hover:border-primary/40 ${
-              read.includes(s.id)
-                ? "border-primary/40 bg-gradient-to-b from-[#F3F7FF] to-[#EDF4FF]"
-                : "border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF]"
-            }`}
-            style={{ borderRadius: 20 }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium uppercase tracking-widest text-caption">
-                {s.industry}
-              </span>
-              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
-                {s.metric}
-              </span>
-            </div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-foreground">{s.company}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{s.challenge}</p>
-          </button>
-        ))}
+        <div className="mt-4 lg:mt-3 grid gap-3 lg:gap-2.5 md:grid-cols-2">
+          {filtered.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => openStory(s.id)}
+              className={`text-left border p-5 lg:p-4.5 h-[160px] lg:h-[135px] xl:h-[140px] flex flex-col justify-between transition-all duration-[180ms] ease-out hover:-translate-y-[2px] hover:scale-[1.01] hover:shadow-[0_8px_25px_rgba(32,76,237,0.05)] hover:border-primary/40 ${
+                read.includes(s.id)
+                  ? "border-primary/40 bg-gradient-to-b from-[#F3F7FF] to-[#EDF4FF]"
+                  : "border-[#E3EBFF] bg-gradient-to-b from-[#FCFDFF] to-[#F7FAFF]"
+              }`}
+              style={{ borderRadius: 16 }}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-caption">
+                    {s.industry}
+                  </span>
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                    {s.metric}
+                  </span>
+                </div>
+                <h3 className="mt-2.5 lg:mt-2 font-display text-base lg:text-[15px] font-semibold text-foreground">
+                  {s.company}
+                </h3>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                {s.challenge}
+              </p>
+            </button>
+          ))}
+        </div>
       </div>
 
       {open &&
@@ -117,7 +125,7 @@ function StoriesPage() {
           document.body,
         )}
 
-      <StepNav current="stories" />
+      <StepNav current="stories" className="mt-auto pt-4 lg:pt-3" />
     </div>
   );
 }

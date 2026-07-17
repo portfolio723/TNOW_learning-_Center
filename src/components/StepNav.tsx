@@ -3,28 +3,40 @@ import { ArrowLeft, ArrowRight, Play, RotateCcw } from "lucide-react";
 import { STEPS, type StepId, useExperience } from "@/lib/experience-store";
 import { useState, useEffect } from "react";
 
-export function StepNav({ current, nextLabel }: { current: StepId; nextLabel?: string }) {
+export function StepNav({
+  current,
+  nextLabel,
+  className,
+}: {
+  current: StepId;
+  nextLabel?: string;
+  className?: string;
+}) {
   const complete = useExperience((s) => s.complete);
   const idx = STEPS.findIndex((s) => s.id === current);
   const prev = STEPS[idx - 1];
   const next = STEPS[idx + 1];
 
   return (
-    <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+    <div
+      className={`${
+        className || "mt-6 lg:mt-4.5 pt-4 lg:pt-3"
+      } flex items-center justify-between border-t border-border pr-16 md:pr-44`}
+    >
       {prev ? (
         <Link
           to={prev.path}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-sm lg:text-xs text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="size-4" /> {prev.label}
+          <ArrowLeft className="size-4 lg:size-3.5" /> {prev.label}
         </Link>
       ) : (
         <span />
       )}
       {next ? (
-        <Link to={next.path} className="btn-primary">
+        <Link to={next.path} className="btn-primary lg:py-2 lg:px-4 lg:text-xs">
           {nextLabel ?? `Continue to ${next.label}`}
-          <ArrowRight className="size-4" />
+          <ArrowRight className="size-4 lg:size-3.5" />
         </Link>
       ) : (
         <span />
