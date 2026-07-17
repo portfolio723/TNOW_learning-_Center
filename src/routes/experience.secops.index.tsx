@@ -93,7 +93,12 @@ function Welcome() {
         </div>
       </div>
 
-      <StepNav current="welcome" nextLabel="Start Journey" className="mt-4 lg:mt-2 pt-4 lg:pt-3" />
+      <StepNav
+        current="welcome"
+        nextLabel="Start Journey"
+        alignEnd
+        className="mt-4 lg:mt-2 pt-4 lg:pt-3"
+      />
     </div>
   );
 }

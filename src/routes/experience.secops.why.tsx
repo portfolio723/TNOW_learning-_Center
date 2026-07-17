@@ -285,7 +285,7 @@ function WhyPage() {
         </div>
       </div>
 
-      <StepNav current="why" className="mt-auto pt-4 lg:pt-3" />
+      <StepNav current="why" alignEnd className="mt-auto pt-4 lg:pt-3" />
     </div>
   );
 }

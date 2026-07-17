@@ -7,10 +7,12 @@ export function StepNav({
   current,
   nextLabel,
   className,
+  alignEnd = false,
 }: {
   current: StepId;
   nextLabel?: string;
   className?: string;
+  alignEnd?: boolean;
 }) {
   const complete = useExperience((s) => s.complete);
   const idx = STEPS.findIndex((s) => s.id === current);
@@ -21,7 +23,7 @@ export function StepNav({
     <div
       className={`${
         className || "mt-6 lg:mt-4.5 pt-4 lg:pt-3"
-      } flex items-center justify-between border-t border-border pr-16 md:pr-44`}
+      } flex items-center justify-between border-t border-border ${alignEnd ? "" : "pr-16 md:pr-44"}`}
     >
       {prev ? (
         <Link
